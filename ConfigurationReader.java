@@ -21,10 +21,14 @@ public abstract class ConfigurationReader {
   }
 
   String nextLine() {
-    if(hasMoreLines()) {
-      return fileScanner.nextLine();
+
+    if(hasMoreLines()){
+      String currentLine = fileScanner.nextLine();
+      if(currentLine.contains("#") == false) {
+        return currentLine;
+      }
     } 
-      return null;
+    return "";
   }
  
  public abstract void load();

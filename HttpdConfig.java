@@ -54,13 +54,15 @@ public class HttpdConfig extends ConfigurationReader {
     public void load() {
       while(hasMoreLines()) {
         String currentLine = nextLine();
-        String keyType = currentLine.substring(0, currentLine.indexOf(" "));
-        if(keyType.equals("Alias")) {
-          loadAlias(currentLine);
-        } else if( keyType.equals("ScriptAlias")){
-          loadScriptAlias(currentLine);
-        } else {
-          loadConfigInfo(currentLine, keyType);
+        if(currentLine.trim().length() > 0 ) {
+          String keyType = currentLine.substring(0, currentLine.indexOf(" "));
+          if(keyType.equals("Alias")) {
+            loadAlias(currentLine);
+          } else if( keyType.equals("ScriptAlias")){
+            loadScriptAlias(currentLine);
+          } else {
+            loadConfigInfo(currentLine, keyType);
+          }
         }
       }
     }
@@ -88,7 +90,7 @@ public class HttpdConfig extends ConfigurationReader {
     }
 
     public static void main(String[] args) {
-      HttpdConfig test = new HttpdConfig("httpd.conf");
+      HttpdConfig test = new HttpdConfig("conf/httpd.conf");
       test.load();
       test.test();
     }
