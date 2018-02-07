@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class MimeTypes extends ConfigurationReader {
 
@@ -29,7 +30,12 @@ public class MimeTypes extends ConfigurationReader {
     }
   }
 
- 
+  public String lookUp(String key) {
+    if(mimeTypes.get(key) == null) {
+      return "";
+    }
+    return mimeTypes.get(key);
+  }
 
   public void test() {
     for(Map.Entry<String,String> entry: mimeTypes.entrySet()){
@@ -42,7 +48,10 @@ public class MimeTypes extends ConfigurationReader {
   public static void main(String[] args) {
     MimeTypes test = new MimeTypes("mime.types");
     test.load();
-    test.test();
+    while(true){
+      Scanner scan = new Scanner(System.in);
+      System.out.println(test.lookUp(scan.nextLine()));
+    }
   }
 
 
