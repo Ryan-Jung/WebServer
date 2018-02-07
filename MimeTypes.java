@@ -18,18 +18,31 @@ public class MimeTypes extends ConfigurationReader {
         String[] tokens = currentLine.split("\\s+");
         int numberOfTokens = tokens.length;
         if(numberOfTokens != 1) {
-          for(int token = 0; token < numberOfTokens; token++) {
-            System.out.print(tokens[token] + " " );
+          String value = tokens[0];
+          String key;
+          for(int token = 1; token < numberOfTokens; token++) {
+            key = tokens[token];
+            mimeTypes.put(key,value);
           }
-          System.out.println("");
         }
       } 
+    }
+  }
+
+ 
+
+  public void test() {
+    for(Map.Entry<String,String> entry: mimeTypes.entrySet()){
+      String key = entry.getKey();
+      String value = entry.getValue();
+      System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
     }
   }
 
   public static void main(String[] args) {
     MimeTypes test = new MimeTypes("mime.types");
     test.load();
+    test.test();
   }
 
 
