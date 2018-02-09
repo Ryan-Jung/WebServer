@@ -4,15 +4,27 @@ import java.util.Map;
 
 public class HttpdConfig extends ConfigurationReader {
     
-    HashMap<String,String> aliases;
-    HashMap<String,String> scriptAliases;
-    HashMap<String,String> configInfo;
+    private HashMap<String,String> aliases;
+    private HashMap<String,String> scriptAliases;
+    private HashMap<String,String> configInfo;
 
     HttpdConfig(String fileName) {
       super(fileName);
       aliases = new HashMap<String,String>();
       scriptAliases = new HashMap<String,String>();
       configInfo = new HashMap<String,String>();
+    }
+
+    public String getConfigValue(String key) {
+      return configInfo.get(key);
+    }
+
+    public String getScriptValue(String key) {
+      return scriptAliases.get(key);
+    }
+
+    public String getAliasValue(String key) {
+      return aliases.get(key);
     }
 
     private String getValue(String currentLine) {

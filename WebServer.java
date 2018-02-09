@@ -11,14 +11,21 @@ public class WebServer{
 
   public static void main(String args[]){
     try{
+      HttpdConfig configFile = new HttpdConfig("conf/httpd.conf");
+      configFile.load();
       start();
     }catch(IOException e){
       e.printStackTrace();
-      System.out.println("closing server");
+      System.out.println("Closing server");
     }
   }
+
+
+
   public static void start() throws IOException{
       try(
+        
+        
         ServerSocket  serverSocket = new ServerSocket(3002);
         Socket socket = serverSocket.accept();
       ){
@@ -28,7 +35,7 @@ public class WebServer{
               System.out.println(bufferedReader.readLine());
             }
           }
-     }
+       }
 
 
   }
