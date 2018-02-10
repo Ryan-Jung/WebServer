@@ -14,9 +14,9 @@ public class WebServer{
       configFile.load();
       try(
         ServerSocket  serverSocket = new ServerSocket(8080);
-        Socket client = serverSocket.accept();
       ){
         while(true){
+              Socket client = serverSocket.accept();
               Worker worker = new Worker(client, mimes, configFile);
               worker.run();
           }

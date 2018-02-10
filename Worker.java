@@ -19,9 +19,11 @@ public class Worker{
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
         if(bufferedReader.ready()){
           System.out.println(bufferedReader.readLine());
+        }else{
+          bufferedReader.close();
         }
       }catch(IOException e){
-        System.out.println("a");
+        e.printStackTrace();
       }
     }
 }

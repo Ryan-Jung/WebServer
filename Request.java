@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.ArrayList;
 public class Request{
 
   private String uri;
@@ -7,7 +8,7 @@ public class Request{
   private String httpVersion;
   private HashMap<String,String> headers;
   private String request;
-
+  private static final ArrayList<String> VERBS = ["GET","HEAD","PUT","POST","DELETE"];
   Request(String request){
       this.request = request;
   }
@@ -16,12 +17,11 @@ public class Request{
       readRequestLine(request);
   }
 
-  private String readRequestLine(String requestLine){
+  private void readRequestLine(String requestLine){
     String[] requestLineInfo = requestLine.split("\\s");
     verb = requestLineInfo[0];
     uri = requestLineInfo[1];
     httpVersion = requestLineInfo[2];
-    return null;
   }
   private void test(){
     System.out.println(verb + "\n"+ uri + "\n"+  httpVersion);
