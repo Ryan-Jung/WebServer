@@ -8,7 +8,7 @@ public class Request{
   private String httpVersion;
   private HashMap<String,String> headers;
   private String request;
-  private static final ArrayList<String> VERBS = ["GET","HEAD","PUT","POST","DELETE"];
+  private static final String[]  VERBS = {"GET","HEAD","PUT","POST","DELETE"};
   Request(String request){
       this.request = request;
   }

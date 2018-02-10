@@ -14,14 +14,18 @@ public class Worker{
       this.config = config;
     }
 
+    private void printLineBreak() {
+      System.out.println("----------------------------------------");
+    }
+
     public void run(){
       try{
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        if(bufferedReader.ready()){
+        while(bufferedReader.ready()){
           System.out.println(bufferedReader.readLine());
-        }else{
-          bufferedReader.close();
         }
+        printLineBreak(); 
+        bufferedReader.close();
       }catch(IOException e){
         e.printStackTrace();
       }
