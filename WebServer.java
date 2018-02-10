@@ -1,40 +1,28 @@
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
 
 public class WebServer{
-  public WebServer(){
-    //load files
-  }
 
-  public static void main(String args[]){
-    try{
-      HttpdConfig configFile = new HttpdConfig("conf/httpd.conf");
+  MimeTypes mimes;
+  HttpdConfig configFile;
+
+  public void start(){
+      configFile = new HttpdConfig("conf/httpd.conf");
+      mimes = new MimeTypes("conf/mime.types");
+      mimes.load();
       configFile.load();
-      start();
-    }catch(IOException e){
-      e.printStackTrace();
-      System.out.println("Closing server");
-    }
-  }
-
-
-
-  public static void start() throws IOException{
       try(
-        
-        
-        ServerSocket  serverSocket = new ServerSocket(3002);
-        Socket socket = serverSocket.accept();
+        ServerSocket  serverSocket = new ServerSocket(8080);
+        Socket client = serverSocket.accept();
       ){
         while(true){
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            if(bufferedReader.ready()){
-              System.out.println(bufferedReader.readLine());
-            }
+              Worker worker = new Worker(client, mimes, configFile);
+              worker.run();
           }
+       }catch(IOException e){
+         e.printStackTrace();
+         System.out.println("Closing Server");
        }
 
 
