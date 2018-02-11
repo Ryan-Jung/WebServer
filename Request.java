@@ -13,7 +13,7 @@ public class Request{
   private String verb;
   private String httpVersion;
   private static HashMap<String,String> headers = new HashMap<String,String>();
-  private String request;
+  private String request = "";
   private HashMap<String,String> VERBS = new HashMap<String,String>();
 
   Request(String request){
@@ -25,8 +25,10 @@ public class Request{
     try{
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
       while(bufferedReader.ready()){
-        System.out.println(bufferedReader.readLine());
-        //request += bufferedReader.readLine();
+        String line = bufferedReader.readLine();
+        //System.out.println(bufferedReader.readLine());
+        if(line != null)
+          request += line + "\r\n";
       }
       bufferedReader.close();
     }catch(IOException e){
@@ -71,7 +73,6 @@ public class Request{
     if(VERBS.containsKey(requestLineInfo[0])){
           verb = requestLineInfo[0];
     }else{
-      //bad Request;
 
     }
     uri = requestLineInfo[1];

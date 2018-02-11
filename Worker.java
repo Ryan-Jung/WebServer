@@ -1,5 +1,5 @@
 import java.net.Socket;
-
+import java.io.IOException;
 public class Worker{
 
     private Socket client;
