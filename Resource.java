@@ -1,29 +1,48 @@
 public class Resource {
 
-  private HttpdConfig configFile;
-  private String httpVersion;
-  private String uri; 
+  private final String DOCINDEX = "index.html";
+  private String absolutePath;
+  private boolean isScript = false;
+  private boolean isProtected = false;
 
-  Resource(HttpdConfig configFile, String uri, String httpVersion) {
-    this.configFile = configFile;
-    this.uri = uri; 
-    this.httpVersion = httpVersion; 
+  private boolean isFile(String uri) {
+    if( uri.contains(".") ) {
+      return true; 
+    }
+    return false;
+  }
+
+  private String resolveAbsolutePath(String uri, HttpdConfig configFile) {
+    String docRoot = configFile.getConfigValue("DocumentRoot");
+    String absPath; 
+    if(configFile.getAliasValue(uri) != null) {
+      absPath = configFile.getAliasValue(uri);
+    } else if( configFile.getScriptValue(uri) != null) {
+      absPath = configFile.getScriptValue(uri);
+      isScript = true;
+    } else {
+      absPath = docRoot + uri;
+    }
+    if( isFile(uri) == false ) {
+      absPath = absPath + DOCINDEX;
+    }
+    return absPath;
+  }
+
+  Resource(HttpdConfig configFile, String uri) {
+    this.absolutePath  = resolveAbsolutePath(uri,configFile);
   }
 
   public String absolutePath(){
-    return configFile.getConfigValue("ServerRoot") + uri;
+    return absolutePath;
   }
 
   public boolean isScript(String script) {
-    String scriptValue = configFile.getScriptValue(script);
-    if(scriptValue == null) {
-      return false;
-    }
-    return true; 
+    return isScript; 
   }
 
   public boolean isProtected() {
-    return false;
+    return isProtected;
   }
 
 }
