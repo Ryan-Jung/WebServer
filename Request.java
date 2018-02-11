@@ -12,7 +12,7 @@ public class Request{
   private byte[] body = {};
   private String verb;
   private String httpVersion;
-  private static HashMap<String,String> headers = new HashMap<String,String>();
+  private HashMap<String,String> headers = new HashMap<String,String>();
   private String request = "";
   private HashMap<String,String> VERBS = new HashMap<String,String>();
 
@@ -69,7 +69,8 @@ public class Request{
   }
 
   private void readRequestLine(String requestLine){
-    String[] requestLineInfo =   requestLine.split("\\s");
+    System.out.println("request:" +requestLine);
+    String[] requestLineInfo = requestLine.split("\\s");
     if(VERBS.containsKey(requestLineInfo[0])){
           verb = requestLineInfo[0];
     }else{
@@ -86,14 +87,18 @@ public class Request{
     headers.put(header,value);
   }
   public void test(){
-    System.out.println(request);
+    //System.out.println(request);
     // System.out.println(verb + "\n"+ uri + "\n"+  httpVersion);
     // for(Map.Entry<String,String> entry : headers.entrySet()){
     //   String key = entry.getKey();
     //   String value = entry.getValue();
     //   System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
     // }
-    // System.out.println(new String(body));
+    // if(body.length > 0){
+    //
+    //   System.out.println(new String(body));
+    // }
+    // System.out.println("-----------------------------------------------");
   }
   // public static void main(String[] args){
   //     Request request = new Request("GET / HTTP/1.1\r\n"
