@@ -64,10 +64,14 @@ public class Request{
 
 
   private void readRequestLine(String requestLine){
-    String[] requestLineInfo = requestLine.split("\\s");
-    verb = requestLineInfo[0];
-    uri = requestLineInfo[1];
-    httpVersion = requestLineInfo[2];
+    try{
+      String[] requestLineInfo = requestLine.split("\\s");
+      verb = requestLineInfo[0];
+      uri = requestLineInfo[1];
+      httpVersion = requestLineInfo[2];
+    }catch(Exception e){
+       
+    }
   }
 
 
@@ -80,18 +84,17 @@ public class Request{
 
 
   public void test(){
-    System.out.println("request: "+request);
-    // System.out.println(verb + "\n"+ uri + "\n"+  httpVersion);
-    // for(Map.Entry<String,String> entry : headers.entrySet()){
-    //   String key = entry.getKey();
-    //   String value = entry.getValue();
-    //   System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
-    // }
-    // if(body.length > 0){
-    //
-    //   System.out.println(new String(body));
-    // }
-    // System.out.println("-----------------------------------------------");
+    System.out.println(verb + "\n"+ uri + "\n"+  httpVersion);
+    for(Map.Entry<String,String> entry : headers.entrySet()){
+      String key = entry.getKey();
+      String value = entry.getValue();
+      System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
+    }
+    if(body.length > 0){
+
+      System.out.println(new String(body));
+    }
+    System.out.println("-----------------------------------------------");
   }
   // public static void main(String[] args){
   //     Request request = new Request("GET / HTTP/1.1\r\n"
