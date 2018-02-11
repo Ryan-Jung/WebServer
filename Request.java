@@ -29,7 +29,6 @@ public class Request{
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
       while(bufferedReader.ready()){
         String line = bufferedReader.readLine();
-        //System.out.println(bufferedReader.readLine());
         request += line + "\r\n";
       }
       bufferedReader.close();
@@ -70,7 +69,7 @@ public class Request{
       uri = requestLineInfo[1];
       httpVersion = requestLineInfo[2];
     }catch(Exception e){
-       
+
     }
   }
 
