@@ -1,7 +1,5 @@
 import java.net.Socket;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
+
 public class Worker{
 
     private Socket client;
@@ -19,15 +17,14 @@ public class Worker{
     }
 
     public void run(){
+
       try{
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        while(bufferedReader.ready()){
-          System.out.println(bufferedReader.readLine());
-        }
-        printLineBreak(); 
-        bufferedReader.close();
+        Request request = new Request(client.getInputStream());
+        request.parse();
+        request.test();
       }catch(IOException e){
         e.printStackTrace();
       }
+
     }
 }
