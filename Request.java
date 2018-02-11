@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.InputStream;
@@ -14,39 +13,33 @@ public class Request{
   private String httpVersion;
   private HashMap<String,String> headers = new HashMap<String,String>();
   private String request = "";
-  private HashMap<String,String> VERBS = new HashMap<String,String>();
 
   Request(String request){
       this.request = request;
-      setVerbs();
   }
+
+
   Request(InputStream inputStream){
-    setVerbs();
+    readInputStream(inputStream);
+  }
+
+
+  public void readInputStream(InputStream inputStream){
     try{
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
       while(bufferedReader.ready()){
         String line = bufferedReader.readLine();
         //System.out.println(bufferedReader.readLine());
-        if(line != null)
-          request += line + "\r\n";
+        request += line + "\r\n";
       }
       bufferedReader.close();
     }catch(IOException e){
       e.printStackTrace();
     }
+  }
 
-  }
-  private void setVerbs(){
-    VERBS.put("GET","T");
-    VERBS.put("HEAD","T");
-    VERBS.put("POST","T");
-    VERBS.put("PUT","T");
-    VERBS.put("DELETE","T");
-  }
+
   public void parse(){
-      if(request == null){
-        return;
-      }
       String [] splitRequest = request.split("\\r?\\n");
       readRequestLine(splitRequest[0]);
       int counter = 1;
@@ -59,6 +52,7 @@ public class Request{
       }
   }
 
+
   private void readBody(String bodyLine){
     byte[] temp = bodyLine.getBytes();
     byte[] newBody = new byte[temp.length + body.length];
@@ -68,17 +62,14 @@ public class Request{
     body = newBody;
   }
 
-  private void readRequestLine(String requestLine){
-    System.out.println("request:" +requestLine);
-    String[] requestLineInfo = requestLine.split("\\s");
-    if(VERBS.containsKey(requestLineInfo[0])){
-          verb = requestLineInfo[0];
-    }else{
 
-    }
+  private void readRequestLine(String requestLine){
+    String[] requestLineInfo = requestLine.split("\\s");
+    verb = requestLineInfo[0];
     uri = requestLineInfo[1];
     httpVersion = requestLineInfo[2];
   }
+
 
   private void readHeaders(String headerLine){
     int indexOfColon = headerLine.indexOf(':');
@@ -86,8 +77,10 @@ public class Request{
     String value = headerLine.substring(indexOfColon+2);
     headers.put(header,value);
   }
+
+
   public void test(){
-    //System.out.println(request);
+    System.out.println("request: "+request);
     // System.out.println(verb + "\n"+ uri + "\n"+  httpVersion);
     // for(Map.Entry<String,String> entry : headers.entrySet()){
     //   String key = entry.getKey();

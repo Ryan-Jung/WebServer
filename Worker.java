@@ -20,7 +20,7 @@ public class Worker{
 
       try{
         Request request = new Request(client.getInputStream());
-        request.parse();
+        //request.parse();
         request.test();
       }catch(IOException e){
         e.printStackTrace();

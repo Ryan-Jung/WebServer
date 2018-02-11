@@ -19,11 +19,8 @@ public class WebServer{
       ){
         while(true){
               client = serverSocket.accept();
-              System.out.println("We should see this once");
               Worker worker = new Worker(client, mimes, configFile);
               worker.run();
-              counter++;
-              System.out.println("COUNTER: " + counter);
               client.close();
           }
        }catch(IOException e){
