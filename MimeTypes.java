@@ -9,6 +9,7 @@ public class MimeTypes extends ConfigurationReader {
   MimeTypes(String fileName) {
     super(fileName);
     mimeTypes = new HashMap<String,String>();
+    mimeTypes.load();
   }
 
   public void load() {

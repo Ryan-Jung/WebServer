@@ -13,6 +13,7 @@ public class HttpdConfig extends ConfigurationReader {
       aliases = new HashMap<String,String>();
       scriptAliases = new HashMap<String,String>();
       configInfo = new HashMap<String,String>();
+      this.load();
     }
 
     public String getConfigValue(String key) {
