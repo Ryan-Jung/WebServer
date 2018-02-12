@@ -17,10 +17,9 @@ public class Worker{
     }
 
     public void run(){
-
+      ResponseFactory response = new ResponseFactory();
       try{
         Request request = new Request(client.getInputStream());
-        request.parse();
         Resource requestResource = new Resource(config, request.getUri());
         //request.test();
       }catch(IOException e){
