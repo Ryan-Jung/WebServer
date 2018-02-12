@@ -21,7 +21,8 @@ public class Worker{
       try{
         Request request = new Request(client.getInputStream());
         request.parse();
-        request.test();
+        Resource requestResource = new Resource(config, request.getUri());
+        //request.test();
       }catch(IOException e){
         e.printStackTrace();
       }
