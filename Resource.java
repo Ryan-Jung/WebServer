@@ -20,14 +20,16 @@ public class Resource {
 
   private String resolveAbsolutePath(String uri, HttpdConfig configFile) {
     String docRoot = configFile.getConfigValue("DocumentRoot");
-    String absPath;
+    docRoot = docRoot.substring(0,docRoot.length()-1); // Remove slash since uri will have one
+    String absPath = "";
     if(configFile.getAliasValue(uri) != null) {
       absPath = configFile.getAliasValue(uri);
     } else if( configFile.getScriptValue(uri) != null) {
       absPath = configFile.getScriptValue(uri);
       isScript = true;
     } else {
-      absPath = docRoot + uri.substring(1);
+      if(uri.length() > 1)
+        absPath = docRoot + uri.substring(1);
     }
     if( isFile(uri) == false ) {
       absPath = absPath + DIRINDEX;
