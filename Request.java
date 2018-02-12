@@ -46,14 +46,16 @@ public class Request{
         readHeaders(splitRequest[counter]);
         counter++;
       }
-      if(counter++ < splitRequest.length){
+      counter++;
+      while(counter < splitRequest.length){
         readBody(splitRequest[counter]);
+        counter++;
       }
   }
 
 
   private void readBody(String bodyLine){
-    byte[] temp = bodyLine.getBytes();
+    byte[] temp = (bodyLine + "\r\n").getBytes();;
     byte[] newBody = new byte[temp.length + body.length];
 
     System.arraycopy(body,0,newBody,0,body.length);
