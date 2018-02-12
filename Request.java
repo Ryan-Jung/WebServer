@@ -16,11 +16,13 @@ public class Request{
 
   Request(String request){
       this.request = request;
+      parse();
   }
 
 
   Request(InputStream inputStream){
     readInputStream(inputStream);
+    parse();
   }
 
 
