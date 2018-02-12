@@ -44,7 +44,7 @@ public class Htpassword extends ConfigurationReader {
     return verifyPassword(username,password);
   }
 
-  private boolean verifyPassword( String username, String password ) {
+  public boolean verifyPassword( String username, String password ) {
     // encrypt the password, and compare it to the password stored
     // in the password file (keyed by username)
     // TODO: implement this - note that the encryption step is provided as a
