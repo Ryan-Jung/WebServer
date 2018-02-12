@@ -84,6 +84,28 @@ public class Request{
   }
 
 
+  public String getUri(){
+    return uri;
+  }
+
+
+  public String getVerb(){
+    return verb;
+  }
+
+  public String getHTTPVersion(){
+    return httpVersion;
+  }
+
+  public byte[] getBody(){
+    return body;
+  }
+
+  public HashMap<String,String> getHeaders(){
+    return headers;
+  }
+
+
   public void test(){
     System.out.println(verb + "\n"+ uri + "\n"+  httpVersion);
     for(Map.Entry<String,String> entry : headers.entrySet()){

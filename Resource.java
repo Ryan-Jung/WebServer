@@ -5,16 +5,22 @@ public class Resource {
   private boolean isScript = false;
   private boolean isProtected = false;
 
+
+  Resource(HttpdConfig configFile, String uri) {
+    this.absolutePath  = resolveAbsolutePath(uri,configFile);
+  }
+
+
   private boolean isFile(String uri) {
     if( uri.contains(".") ) {
-      return true; 
+      return true;
     }
     return false;
   }
 
   private String resolveAbsolutePath(String uri, HttpdConfig configFile) {
     String docRoot = configFile.getConfigValue("DocumentRoot");
-    String absPath; 
+    String absPath;
     if(configFile.getAliasValue(uri) != null) {
       absPath = configFile.getAliasValue(uri);
     } else if( configFile.getScriptValue(uri) != null) {
@@ -29,16 +35,13 @@ public class Resource {
     return absPath;
   }
 
-  Resource(HttpdConfig configFile, String uri) {
-    this.absolutePath  = resolveAbsolutePath(uri,configFile);
-  }
 
   public String absolutePath(){
     return absolutePath;
   }
 
   public boolean isScript(String script) {
-    return isScript; 
+    return isScript;
   }
 
   public boolean isProtected() {
