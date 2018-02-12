@@ -1,6 +1,6 @@
 public class Resource {
 
-  private final String DOCINDEX = "index.html";
+  private final String DIRINDEX = "index.html";
   private String absolutePath;
   private boolean isScript = false;
   private boolean isProtected = false;
@@ -21,10 +21,10 @@ public class Resource {
       absPath = configFile.getScriptValue(uri);
       isScript = true;
     } else {
-      absPath = docRoot + uri;
+      absPath = docRoot + uri.substring(1);
     }
     if( isFile(uri) == false ) {
-      absPath = absPath + DOCINDEX;
+      absPath = absPath + DIRINDEX;
     }
     return absPath;
   }
@@ -43,6 +43,16 @@ public class Resource {
 
   public boolean isProtected() {
     return isProtected;
+  }
+
+  public static void main(String[] args) {
+    
+    HttpdConfig config = new HttpdConfig("conf/httpd.conf");
+    config.load();
+    Resource test = new Resource(config,"/tommySucksDick1.pdf");
+    System.out.println(test.absolutePath());
+
+
   }
 
 }
