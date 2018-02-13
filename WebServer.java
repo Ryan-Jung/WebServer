@@ -21,6 +21,7 @@ public class WebServer{
               client = serverSocket.accept();
               Worker worker = new Worker(client, mimes, configFile);
               worker.run();
+
               client.close();
           }
        }catch(IOException e){

@@ -5,7 +5,7 @@ public class Htaccess extends ConfigurationReader {
   Htpassword userFile;
   String authType;
   String authName;
-  String require; 
+  String require;
   HashMap<String,String> htAccessValues;
 
   Htaccess(String file) {
@@ -29,7 +29,7 @@ public class Htaccess extends ConfigurationReader {
   }
 
   public void parseLine(String line) {
-    String currentLine = nextLine(); 
+    String currentLine = nextLine();
     currentLine.replace("\"","");
     String[] tokens = currentLine.split("\\s+");
     int numberOfTokens = tokens.length;
@@ -40,6 +40,10 @@ public class Htaccess extends ConfigurationReader {
 
   public boolean isAuthorized (String username, String password) {
     return userFile.verifyPassword(username,password);
+  }
+
+  public Htpassword getAuthUserFile(){
+    return userFile;
   }
 
 

@@ -54,7 +54,7 @@ public class Htpassword extends ConfigurationReader {
       return true;
     }
     return false;
-   
+
   }
 
   private String encryptClearPassword( String password ) {
@@ -69,14 +69,14 @@ public class Htpassword extends ConfigurationReader {
       return "";
     }
   }
-  
+
   public static void main(String[] args) {
      try{
 
      Htpassword test = new Htpassword("example.htpasswd");
      System.out.println(test.passwords.get("jrob"));
 
-      
+
      }catch(IOException e){
 
      }
