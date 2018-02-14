@@ -11,6 +11,12 @@ public abstract class Response{
   }
 
   public void send(OutputStream output){
+      byte[] statusLine = generateStatusLine();
+      output.write(statusLine);
+  }
 
+  private byte[] generateStatusLine(){
+     String statusLine = "HTTP/1.1 " + code + " " + reasonPhrase + "/r/n";
+     return statusLine.getBytes();
   }
 }
