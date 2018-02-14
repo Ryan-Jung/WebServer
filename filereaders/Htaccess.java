@@ -12,7 +12,6 @@ public class Htaccess extends ConfigurationReader {
   public Htaccess(String file) {
     super(file);
     htAccessValues = new HashMap<String,String>();
-    this.load();
   }
 
   public void load() {

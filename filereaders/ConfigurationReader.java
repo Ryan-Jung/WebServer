@@ -16,6 +16,7 @@ public abstract class ConfigurationReader {
     } catch(FileNotFoundException error) {
       error.printStackTrace();
     }
+    load();
   }
 
   boolean hasMoreLines(){
