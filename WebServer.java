@@ -12,11 +12,8 @@ public class WebServer{
   public void start(){
       configFile = new HttpdConfig("conf/httpd.conf");
       mimes = new MimeTypes("conf/mime.types");
-      int counter = 0;
-      mimes.load();
-      configFile.load();
       try(
-        ServerSocket  serverSocket = new ServerSocket(8080);
+        ServerSocket  serverSocket = new ServerSocket(getPortNumber());
       ){
         while(true){
               client = serverSocket.accept();
@@ -29,6 +26,15 @@ public class WebServer{
        }
 
 
+  }
+  private int getPortNumber(){
+    int DEFAULT_PORT_NUMBER = 8080;
+    if(configFile.getConfigValue("Listen") != null){
+      String portNum = configFile.getConfigValue("Listen");
+      return Integer.parseInt(portNum);
+    }else{
+      return DEFAULT_PORT_NUMBER;
+    }
   }
 
 }
