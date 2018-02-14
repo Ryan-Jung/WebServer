@@ -1,3 +1,4 @@
+package request;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.BufferedReader;
@@ -14,13 +15,13 @@ public class Request{
   private HashMap<String,String> headers = new HashMap<String,String>();
   private String request = "";
 
-  Request(String request){
+  public Request(String request){
       this.request = request;
       parse();
   }
 
 
-  Request(InputStream inputStream){
+  public Request(InputStream inputStream){
     readInputStream(inputStream);
     parse();
   }

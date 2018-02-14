@@ -1,3 +1,4 @@
+package filereaders;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -6,7 +7,7 @@ public class MimeTypes extends ConfigurationReader {
 
   HashMap<String,String> mimeTypes;
 
-  MimeTypes(String fileName) {
+  public MimeTypes(String fileName) {
     super(fileName);
     mimeTypes = new HashMap<String,String>();
     this.load();

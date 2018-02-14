@@ -1,14 +1,15 @@
+package filereaders;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class HttpdConfig extends ConfigurationReader {
-    
+
     private HashMap<String,String> aliases;
     private HashMap<String,String> scriptAliases;
     private HashMap<String,String> configInfo;
 
-    HttpdConfig(String fileName) {
+    public HttpdConfig(String fileName) {
       super(fileName);
       aliases = new HashMap<String,String>();
       scriptAliases = new HashMap<String,String>();
@@ -54,7 +55,7 @@ public class HttpdConfig extends ConfigurationReader {
     }
 
     private void loadScriptAlias(String currentLine){
-        String key = getAlias(currentLine); 
+        String key = getAlias(currentLine);
         String value = getValueInQuotes(currentLine);
         scriptAliases.put(key,value);
     }
@@ -82,7 +83,7 @@ public class HttpdConfig extends ConfigurationReader {
 
     void test() {
 
-      System.out.println("Printing Config shit: \n"); 
+      System.out.println("Printing Config shit: \n");
       for (Map.Entry<String,String> entry : configInfo.entrySet()) {
         String key = entry.getKey();
         String value = entry.getValue();

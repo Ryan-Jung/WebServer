@@ -1,3 +1,4 @@
+package filereaders;
 import java.io.IOException;
 import java.util.HashMap;
 public class Htaccess extends ConfigurationReader {
@@ -8,7 +9,7 @@ public class Htaccess extends ConfigurationReader {
   String require;
   HashMap<String,String> htAccessValues;
 
-  Htaccess(String file) {
+  public Htaccess(String file) {
     super(file);
     htAccessValues = new HashMap<String,String>();
     this.load();
@@ -44,6 +45,10 @@ public class Htaccess extends ConfigurationReader {
 
   public Htpassword getAuthUserFile(){
     return userFile;
+  }
+
+  public String getAuthType(){
+    return authType;
   }
 
 

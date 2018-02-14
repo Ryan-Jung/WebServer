@@ -1,23 +1,25 @@
+package filereaders;
 import java.io.File;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
+
 public abstract class ConfigurationReader {
-  
+
   private File file;
   private Scanner fileScanner;
 
-  ConfigurationReader(String fileName) {
+  public ConfigurationReader(String fileName) {
     file = new File(fileName);
-    try { 
+    try {
       fileScanner = new Scanner(file);
     } catch(FileNotFoundException error) {
       error.printStackTrace();
     }
   }
- 
+
   boolean hasMoreLines(){
-    return fileScanner.hasNextLine(); 
+    return fileScanner.hasNextLine();
   }
 
   String nextLine() {
@@ -27,9 +29,9 @@ public abstract class ConfigurationReader {
       if(currentLine.contains("#") == false) {
         return currentLine;
       }
-    } 
+    }
     return "";
   }
- 
+
  public abstract void load();
 }

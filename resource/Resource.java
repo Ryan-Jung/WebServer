@@ -1,3 +1,5 @@
+package resource;
+import filereaders.*;
 public class Resource {
 
   private final String DIRINDEX = "index.html";
@@ -6,7 +8,7 @@ public class Resource {
   private boolean isProtected = false;
 
 
-  Resource(HttpdConfig configFile, String uri) {
+  public Resource(HttpdConfig configFile, String uri) {
     this.absolutePath  = resolveAbsolutePath(uri,configFile);
   }
 
@@ -51,7 +53,7 @@ public class Resource {
   }
 
   public static void main(String[] args) {
-    
+
     HttpdConfig config = new HttpdConfig("conf/httpd.conf");
     config.load();
     Resource test = new Resource(config,"/tommySucksDick1.pdf");

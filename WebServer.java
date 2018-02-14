@@ -1,3 +1,4 @@
+import filereaders.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
@@ -21,8 +22,6 @@ public class WebServer{
               client = serverSocket.accept();
               Worker worker = new Worker(client, mimes, configFile);
               worker.run();
-
-              client.close();
           }
        }catch(IOException e){
          e.printStackTrace();
