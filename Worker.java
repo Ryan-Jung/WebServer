@@ -5,6 +5,7 @@ import request.*;
 import java.net.Socket;
 import java.io.IOException;
 import java.io.File;
+
 public class Worker{
     private Socket client;
     private MimeTypes mimes;
@@ -24,9 +25,7 @@ public class Worker{
       Request request = new Request(client.getInputStream());
       request.test();
       Resource requestResource = new Resource(config, request.getUri());
-      //responseFactory.getResponse(request,requestResource);
-      //if(htaccessExists() && hasAuthorization()){
-      //}
+      responseFactory.getResponse(request,requestResource);
     }
 
 

@@ -12,21 +12,24 @@ public class WebServer{
   public void start(){
       configFile = new HttpdConfig("conf/httpd.conf");
       mimes = new MimeTypes("conf/mime.types");
+      int portNumber = getPortNumber();
+      System.out.println("Starting server on port: " + portNumber);
       try(
-        ServerSocket  serverSocket = new ServerSocket(getPortNumber());
+        ServerSocket  serverSocket = new ServerSocket(portNumber);
       ){
         while(true){
               client = serverSocket.accept();
               Worker worker = new Worker(client, mimes, configFile);
               worker.run();
+              client.close();
           }
        }catch(IOException e){
          e.printStackTrace();
          System.out.println("Closing Server");
        }
-
-
   }
+
+
   private int getPortNumber(){
     int DEFAULT_PORT_NUMBER = 8080;
     if(configFile.getConfigValue("Listen") != null){

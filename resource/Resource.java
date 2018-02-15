@@ -14,7 +14,7 @@ public class Resource {
 
 
   private boolean isFile(String uri) {
-    if( uri.contains(".") ) {
+    if( uri != null && uri.contains(".") ) {
       return true;
     }
     return false;
@@ -30,7 +30,7 @@ public class Resource {
       absPath = configFile.getScriptValue(uri);
       isScript = true;
     } else {
-      if(uri.length() > 1)
+      if(uri != null && uri.length() > 1)
         absPath = docRoot + uri.substring(1);
     }
     if( isFile(uri) == false ) {
