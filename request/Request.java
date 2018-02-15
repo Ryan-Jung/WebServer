@@ -1,136 +1,148 @@
 package request;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.InputStream;
 import java.io.IOException;
 
-public class Request{
+public class Request {
 
   private String uri;
-  private byte[] body = {};
   private String verb;
   private String httpVersion;
-  private HashMap<String,String> headers = new HashMap<String,String>();
   private String request = "";
+  private byte[] body = {};
+  private HashMap<String, String> headers = new HashMap<String, String>();
+  private HashSet<String> validVerbs = new HashSet<String>();
 
-  public Request(String request){
-      this.request = request;
-      parse();
+  private Request(String request) {
+    this.request = request;
+    parse();
   }
 
-
-  public Request(InputStream inputStream){
+  public Request(InputStream inputStream) {
+    loadValidVerbs();
     readInputStream(inputStream);
     parse();
   }
 
+  private void loadValidVerbs() {
+    validVerbs.add("GET");
+    validVerbs.add("HEAD");
+    validVerbs.add("POST");
+    validVerbs.add("PUT");
+    validVerbs.add("DELETE");
+  }
 
-  public void readInputStream(InputStream inputStream){
-    try{
+  public void readInputStream(InputStream inputStream) {
+    String line = null;
+    try {
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-      while(bufferedReader.ready()){
-        String line = bufferedReader.readLine();
+      if (bufferedReader.ready()) {
+        while (line == null) {
+          System.out.println("Line:" + line);
+          line = bufferedReader.readLine();
+        }
         request += line + "\r\n";
       }
       bufferedReader.close();
-    }catch(IOException e){
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-
-  public void parse(){
-      String [] splitRequest = request.split("\\r?\\n");
-      readRequestLine(splitRequest[0]);
-      int counter = 1;
-      while(counter < splitRequest.length && !splitRequest[counter].trim().isEmpty()){
-        readHeaders(splitRequest[counter]);
-        counter++;
-      }
+  public void parse() {
+    String[] splitRequest = request.split("\\r?\\n");
+    readRequestLine(splitRequest[0]);
+    int counter = 1;
+    while (counter < splitRequest.length && !splitRequest[counter].trim().isEmpty()) {
+      readHeaders(splitRequest[counter]);
       counter++;
-      while(counter < splitRequest.length){
-        readBody(splitRequest[counter]);
-        counter++;
-      }
-  }
-
-
-  private void readBody(String bodyLine){
-    byte[] temp = (bodyLine + "\r\n").getBytes();;
-    byte[] newBody = new byte[temp.length + body.length];
-
-    System.arraycopy(body,0,newBody,0,body.length);
-    System.arraycopy(temp,0,newBody,body.length,temp.length);
-    body = newBody;
-  }
-
-
-  private void readRequestLine(String requestLine){
-    try{
-      String[] requestLineInfo = requestLine.split("\\s");
-      verb = requestLineInfo[0];
-      uri = requestLineInfo[1];
-      httpVersion = requestLineInfo[2];
-    }catch(Exception e){
-
+    }
+    counter++;
+    while (counter < splitRequest.length) {
+      readBody(splitRequest[counter]);
+      counter++;
     }
   }
 
+  private void readBody(String bodyLine) {
+    byte[] temp = (bodyLine + "\r\n").getBytes();
+    byte[] newBody = new byte[temp.length + body.length];
 
-  private void readHeaders(String headerLine){
-    int indexOfColon = headerLine.indexOf(':');
-    String header = headerLine.substring(0,indexOfColon);
-    String value = headerLine.substring(indexOfColon+2);
-    headers.put(header,value);
+    System.arraycopy(body, 0, newBody, 0, body.length);
+    System.arraycopy(temp, 0, newBody, body.length, temp.length);
+
+    body = newBody;
   }
 
+  private void readRequestLine(String requestLine) {
+    String[] requestLineInfo = requestLine.split("\\s");
 
-  public String getUri(){
+    if (requestLineInfo.length == 3) {
+      verb = requestLineInfo[0];
+      uri = requestLineInfo[1];
+      httpVersion = requestLineInfo[2];
+    }
+  }
+
+  private void readHeaders(String headerLine) {
+    int indexOfColon = headerLine.indexOf(':');
+    String header = headerLine.substring(0, indexOfColon);
+    String value = headerLine.substring(indexOfColon + 2);
+    headers.put(header, value);
+  }
+
+  public String getUri() {
     return uri;
   }
 
-
-  public String getVerb(){
+  public String getVerb() {
     return verb;
   }
 
-  public String getHTTPVersion(){
+  public String getHTTPVersion() {
     return httpVersion;
   }
 
-  public byte[] getBody(){
+  public byte[] getBody() {
     return body;
   }
 
-  public HashMap<String,String> getHeaders(){
+  public HashMap<String, String> getHeaders() {
     return headers;
   }
 
+  private boolean isValidVerb(String verb) {
+    return validVerbs.contains(verb);
+  }
 
-  public void test(){
-    System.out.println(verb + "\n"+ uri + "\n"+  httpVersion);
-    for(Map.Entry<String,String> entry : headers.entrySet()){
+  public boolean isValidRequest() {
+    boolean validRequestLine = uri != null && verb != null && httpVersion != null;
+    boolean validBody = true;
+
+    if (body.length > 0) {
+      validBody = headers.containsKey("Content-Length");
+    }
+    return validRequestLine && isValidVerb(verb) && validBody;
+  }
+
+  public void test() {
+    System.out.println(verb + "\n" + uri + "\n" + httpVersion);
+
+    for (Map.Entry<String, String> entry : headers.entrySet()) {
       String key = entry.getKey();
       String value = entry.getValue();
       System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
     }
-    if(body.length > 0){
 
+    if (body.length > 0) {
       System.out.println(new String(body));
     }
     System.out.println("-----------------------------------------------");
   }
-  // public static void main(String[] args){
-  //     Request request = new Request("GET / HTTP/1.1\r\n"
-  //                                   +"test: 12312321-5532\r\n"
-  //                                   +"Content-Length: 9\r\n\r\n"+
-  //                                   "123456789"
-  //                                   );
-  //     request.parse();
-  //     request.test();
-  //
-  // }
 
 }
