@@ -13,7 +13,7 @@ public class ResponseFactory{
     public Response getResponse(Request request, Resource requestResource){
       this.request = request;
       this.requestResource = requestResource;
-      return null;
+      return new Response200(requestResource);
     }
 
 

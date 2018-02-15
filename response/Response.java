@@ -17,17 +17,18 @@ public abstract class Response{
 
       byte[] statusLine = generateStatusLine();
       write(statusLine,outputStream);
+      flushOutput(outputStream);
   }
 
 
-  private void write(byte[] bytesToWrite,OutputStream outputStream){
+  void write(byte[] bytesToWrite,OutputStream outputStream){
 
     try{
       outputStream.write(bytesToWrite);
     }catch(IOException e){}
   }
 
-  private void flushOutput(OutputStream outputStream){
+  void flushOutput(OutputStream outputStream){
 
     try{
       outputStream.flush();

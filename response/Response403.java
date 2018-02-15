@@ -1,6 +1,7 @@
 package Response;
+import resource.Resource;
 
-public class response403{
+public class Response403 extends Response{
   Response403(Resource resource){
     super(resource);
     this.code = 403;
