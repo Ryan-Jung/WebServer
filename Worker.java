@@ -23,9 +23,11 @@ public class Worker{
     public void run() throws IOException{
       ResponseFactory responseFactory = new ResponseFactory();
       Request request = new Request(client.getInputStream());
-      request.test();
+      //request.test();
       Resource requestResource = new Resource(config, request.getUri());
-      responseFactory.getResponse(request,requestResource);
+      Response response = responseFactory.getResponse(request,requestResource);
+      response.send(client.getOutputStream());
+      client.close();
     }
 
 

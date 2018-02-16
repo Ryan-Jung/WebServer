@@ -48,11 +48,33 @@ public class HttpdConfig extends ConfigurationReader {
       return currentLine.substring(firstSpace,lastSpace);
     }
 
+
+    public String getAliasNameIfAlias(String uri){
+      for(String alias : aliases.keySet()){
+        if(uri.contains(alias)){
+          return alias;
+        }
+      }
+      return "";
+    }
+
+
+    public String getScriptNameIfScript(String uri){
+      for(String scriptAlias : scriptAliases.keySet()){
+        if(uri.contains(scriptAlias)){
+          return scriptAlias;
+        }
+      }
+      return "";
+    }
+
+
     private void loadAlias(String currentLine) {
         String key = getAlias(currentLine);
         String value = getValueInQuotes(currentLine);
         aliases.put(key,value);
     }
+
 
     private void loadScriptAlias(String currentLine){
         String key = getAlias(currentLine);
@@ -60,10 +82,12 @@ public class HttpdConfig extends ConfigurationReader {
         scriptAliases.put(key,value);
     }
 
+
     private void loadConfigInfo(String currentLine, String key) {
         String value = getValue(currentLine);
         configInfo.put(key,value);
     }
+
 
     public void load() {
       while(hasMoreLines()) {
@@ -81,7 +105,8 @@ public class HttpdConfig extends ConfigurationReader {
       }
     }
 
-    void test() {
+
+    public void test() {
 
       System.out.println("Printing Config shit: \n");
       for (Map.Entry<String,String> entry : configInfo.entrySet()) {
@@ -102,6 +127,7 @@ public class HttpdConfig extends ConfigurationReader {
         System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
       }
     }
+
 
     public static void main(String[] args) {
       HttpdConfig test = new HttpdConfig("conf/httpd.conf");

@@ -139,10 +139,10 @@ public class Request {
   public boolean isValidRequest() {
 
     boolean validRequestLine = uri != null && verb != null && httpVersion != null;
-    boolean validBody = false;
+    boolean validBody = true;
     if(headers.containsKey("Content-Length")
-      && Integer.parseInt(headers.get("Content-Length")) == body.length){
-        validBody = true;
+      && Integer.parseInt(headers.get("Content-Length")) != body.length){
+        validBody = false;
       }
     return validRequestLine && isValidVerb(verb) && validBody;
   }
