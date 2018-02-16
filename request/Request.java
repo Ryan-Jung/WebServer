@@ -18,16 +18,19 @@ public class Request {
   private HashMap<String, String> headers = new HashMap<String, String>();
   private HashSet<String> validVerbs = new HashSet<String>();
 
+
   private Request(String request) {
     this.request = request;
     parse();
   }
+
 
   public Request(InputStream inputStream) {
     loadValidVerbs();
     readInputStream(inputStream);
     parse();
   }
+
 
   private void loadValidVerbs() {
     validVerbs.add("GET");
@@ -37,24 +40,23 @@ public class Request {
     validVerbs.add("DELETE");
   }
 
+
   public void readInputStream(InputStream inputStream) {
-    String line = null;
+    StringBuffer builder = new StringBuffer();
+    String line;
     try {
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-      if (bufferedReader.ready()) {
-        while (line == null) {
-          System.out.println("Line:" + line);
-          line = bufferedReader.readLine();
-        }
-        request += line + "\r\n";
+      while ((line = bufferedReader.readLine()) != null && !line.equals("")) {
+        builder.append(line + "\r\n");
       }
-      bufferedReader.close();
+      request = builder.toString();
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  public void parse() {
+
+  private void parse() {
     String[] splitRequest = request.split("\\r?\\n");
     readRequestLine(splitRequest[0]);
     int counter = 1;
@@ -69,6 +71,7 @@ public class Request {
     }
   }
 
+
   private void readBody(String bodyLine) {
     byte[] temp = (bodyLine + "\r\n").getBytes();
     byte[] newBody = new byte[temp.length + body.length];
@@ -78,6 +81,7 @@ public class Request {
 
     body = newBody;
   }
+
 
   private void readRequestLine(String requestLine) {
     String[] requestLineInfo = requestLine.split("\\s");
@@ -89,6 +93,7 @@ public class Request {
     }
   }
 
+
   private void readHeaders(String headerLine) {
     int indexOfColon = headerLine.indexOf(':');
     String header = headerLine.substring(0, indexOfColon);
@@ -96,41 +101,55 @@ public class Request {
     headers.put(header, value);
   }
 
+
   public String getUri() {
     return uri;
   }
+
 
   public String getVerb() {
     return verb;
   }
 
+
   public String getHTTPVersion() {
+
     return httpVersion;
   }
 
+
   public byte[] getBody() {
+
     return body;
   }
 
+
   public HashMap<String, String> getHeaders() {
+
     return headers;
   }
 
+
   private boolean isValidVerb(String verb) {
+
     return validVerbs.contains(verb);
   }
 
-  public boolean isValidRequest() {
-    boolean validRequestLine = uri != null && verb != null && httpVersion != null;
-    boolean validBody = true;
 
-    if (body.length > 0) {
-      validBody = headers.containsKey("Content-Length");
-    }
+  public boolean isValidRequest() {
+
+    boolean validRequestLine = uri != null && verb != null && httpVersion != null;
+    boolean validBody = false;
+    if(headers.containsKey("Content-Length")
+      && Integer.parseInt(headers.get("Content-Length")) == body.length){
+        validBody = true;
+      }
     return validRequestLine && isValidVerb(verb) && validBody;
   }
 
+
   public void test() {
+
     System.out.println(verb + "\n" + uri + "\n" + httpVersion);
 
     for (Map.Entry<String, String> entry : headers.entrySet()) {
@@ -142,6 +161,7 @@ public class Request {
     if (body.length > 0) {
       System.out.println(new String(body));
     }
+    System.out.println("Valid Request " + isValidRequest());
     System.out.println("-----------------------------------------------");
   }
 
