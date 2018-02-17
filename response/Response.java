@@ -15,7 +15,7 @@ public abstract class Response{
   }
 
 
-  public void send(OutputStream outputStream){
+  public void send(OutputStream outputStream) throws IOException {
 
       String statusLine = generateStatusLine();
       write(statusLine.getBytes(),outputStream);
