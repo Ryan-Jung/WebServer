@@ -39,6 +39,9 @@ public class Htpassword extends ConfigurationReader {
     );
     // The string is the key:value pair username:password
     String[] tokens = credentials.split( ":" );
+    if(tokens.length != 2){
+      return false;
+    }
     String username = tokens[0];
     String password = tokens[1];
     return verifyPassword(username,password);

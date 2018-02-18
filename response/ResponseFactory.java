@@ -107,6 +107,7 @@ public class ResponseFactory{
       Htpassword htpass =  htaccess.createPasswordFile();
       String authInfo = request.getHeaderValue("Authorization");
       String [] authStrings = authInfo.split("\\s+");
+
       return htpass.isAuthorized(authStrings[1]);
     }
 
