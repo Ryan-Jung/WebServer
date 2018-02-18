@@ -103,8 +103,8 @@ public class ResponseFactory{
       if(config.getConfigValue("AccessFileName") != null){
         accessFileName = config.getConfigValue("AccessFileName");
       }
-      System.out.println("Checking" + requestResource.getDirectory() + accessFileName);
-      Htaccess htaccess = new Htaccess("/home/bob/Desktop/WebServer/web-server-team404/public_html/.htaccess");
+      Htaccess htaccess = new Htaccess(requestResource.getDirectory() + accessFileName);
+      htaccess.createPasswordFile(requestResource.getDirectory());
       String authInfo = request.getHeaderValue("Authorization");
       String username = authInfo.substring( 0, authInfo.indexOf(":"));
       String password = authInfo.substring( authInfo.indexOf("}") + 2 );
