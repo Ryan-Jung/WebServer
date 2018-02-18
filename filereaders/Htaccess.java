@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.util.HashMap;
 public class Htaccess extends ConfigurationReader {
 
-  Htpassword userFile;
   String authType;
   String authName;
   String require;
@@ -35,24 +34,12 @@ public class Htaccess extends ConfigurationReader {
     }
   }
 
-  public boolean isAuthorized (String username, String password) {
-    return userFile.verifyPassword(username,password);
-  }
-
-  public Htpassword getAuthUserFile(){
-    return userFile;
-  }
-
   public String getAuthType(){
     return authType;
   }
 
-  public void createPasswordFile(String directory){
-    try {
-      userFile = new Htpassword( directory + htAccessValues.get("AuthUserFile"));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  public Htpassword createPasswordFile() throws IOException{
+    return new Htpassword(htAccessValues.get("AuthUserFile"));
   }
 
 

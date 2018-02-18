@@ -3,6 +3,7 @@ import request.*;
 import resource.*;
 import filereaders.*;
 import java.io.File;
+import java.io.IOException;
 
 public class ResponseFactory{
     private Resource requestResource;
@@ -12,7 +13,7 @@ public class ResponseFactory{
       config = configFile;
     }
 
-    public Response getResponse(Request request, Resource requestResource){
+    public Response getResponse(Request request, Resource requestResource) throws IOException{
       this.requestResource = requestResource;
       if(request.isValidRequest()){
         return completeRequest(request, requestResource);
@@ -22,7 +23,7 @@ public class ResponseFactory{
     }
 
 
-    private Response completeRequest(Request request, Resource resource){
+    private Response completeRequest(Request request, Resource resource) throws IOException{
         Response response = null;
         if( resource.isProtected() ) {
           if( !hasAuthHeaders( request) ) {
@@ -98,18 +99,16 @@ public class ResponseFactory{
       return false;
     }
 
-    private boolean checkAuthorization(Request request){
+    private boolean checkAuthorization(Request request) throws IOException{
       String accessFileName = ".htaccess";
       if(config.getConfigValue("AccessFileName") != null){
         accessFileName = config.getConfigValue("AccessFileName");
       }
       Htaccess htaccess = new Htaccess(requestResource.getDirectory() + accessFileName);
-      htaccess.createPasswordFile(requestResource.getDirectory());
+      Htpassword htpass =  htaccess.createPasswordFile();
       String authInfo = request.getHeaderValue("Authorization");
-      String username = authInfo.substring( 0, authInfo.indexOf(":"));
-      String password = authInfo.substring( authInfo.indexOf("}") + 2 );
 
-      return htaccess.isAuthorized(username,password);
+      return htpass.isAuthorized(authInfo);
     }
 
 }
