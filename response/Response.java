@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.DataOutputStream;
+import java.time.LocalDateTime;
 
 public abstract class Response{
   public int code;
@@ -15,17 +16,9 @@ public abstract class Response{
   }
 
 
-  public void send(OutputStream outputStream) throws IOException {
-
-      String statusLine = generateStatusLine();
-      write(statusLine.getBytes(),outputStream);
-      String space = "\r\n";
-      byte[] body =  "<html><p style = 'color:green'>Hello world</p></html>".getBytes();
-      String headers = "Content-Length" + body.length + "\r\n";
-
-      write(headers.getBytes(),outputStream);
-      write(space.getBytes(),outputStream);
-      write(body,outputStream);
+  public void send(OutputStream outputStream) throws IOException{
+      write(getStatusLine(),outputStream);
+      write(getDateAndServer(),outputStream);
   }
 
 
@@ -35,10 +28,15 @@ public abstract class Response{
         }
   }
 
+  private byte[] getDateAndServer(){
+    String date = "Date: " +LocalDateTime.now().toString() + "\r\n";
+    String server = "Server: ryan-alvin-web-server\r\n";
+    return (date + server).getBytes();
+  }
 
-  private String generateStatusLine(){
+  private byte[] getStatusLine(){
 
      String statusLine = "HTTP/1.1 " + code + " " + reasonPhrase +"\r\n";
-     return statusLine;
+     return statusLine.getBytes();
   }
 }

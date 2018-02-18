@@ -4,14 +4,16 @@ import java.io.File;
 
 public class Resource {
 
-  private final String DIRINDEX = "index.html";
+  private static String DIRINDEX = "index.html";
   private String absolutePath;
   private boolean isScript = false;
   private HttpdConfig configFile;
 
 
   public Resource(HttpdConfig configFile, String uri) {
-
+    if(configFile.getConfigValue("DirectoryIndex") != null){
+      this.DIRINDEX = configFile.getConfigValue("DirectoryIndex");
+    }
     this.configFile = configFile;
     this.absolutePath  = resolveAbsolutePath(uri,configFile);
   }
