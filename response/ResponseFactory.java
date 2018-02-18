@@ -1,22 +1,36 @@
 package response;
 import request.*;
 import resource.*;
+import filereaders.*;
 
 public class ResponseFactory{
     private Resource requestResource;
+    private HttpdConfig config; 
+
+    public ResponseFactory(HttpdConfig configFile) {
+      config = configFile;
+    }
 
     public Response getResponse(Request request, Resource requestResource){
       this.requestResource = requestResource;
       if(request.isValidRequest()){
-        return completeRequest(request);
+        return completeRequest(request, requestResource);
       }else{
         return new Response400(requestResource);
       }
     }
 
-
-    private Response completeRequest(Request request){
+    private Response completeRequest(Request request, Resource resource){
         Response response = null;
+        if( resource.isProtected() ) {
+          if( !hasAuthHeaders( request) ) {
+            return new Response401(resource); 
+          } else {
+            if( !checkAuthorization(request) ) {
+              return new Response403(resource);
+            }
+          }
+        }
         switch (request.getVerb()){
           case "GET": response = completeGetRequest(request);
                       break;
@@ -31,6 +45,7 @@ public class ResponseFactory{
         }
         return response;
     }
+
 
 
     private Response completeGetRequest(Request request){
@@ -62,5 +77,24 @@ public class ResponseFactory{
       return null;
     }
 
+
+
+    private boolean hasAuthHeaders(Request request) {
+      if( request.containsHeader("WWW-Authenticate") 
+      &&  request.containsHeader("Authorization")  ) {
+        return true;
+      }
+      return false;
+    }
+
+    private boolean checkAuthorization(Request request){
+         
+      Htaccess htaccess = new Htaccess(config.getConfigValue("AccessFileName"));
+      String authInfo = request.getHeaderValue("Authorization");
+      String username = authInfo.substring( 0, authInfo.indexOf(":"));
+      String password = authInfo.substring( authInfo.indexOf("}") + 2 );
+     
+      return htaccess.isAuthorized(username,password);
+    } 
 
 }

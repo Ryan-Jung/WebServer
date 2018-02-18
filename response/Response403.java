@@ -1,4 +1,4 @@
-package Response;
+package response;
 import resource.Resource;
 
 public class Response403 extends Response{
