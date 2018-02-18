@@ -94,5 +94,7 @@ public class Resource {
     return accessFile.exists();
   }
 
-
+  public String getDirectory(){
+    return  absolutePath.substring(0,absolutePath.lastIndexOf('/') + 1);
+  }
 }

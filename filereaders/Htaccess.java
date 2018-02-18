@@ -22,11 +22,7 @@ public class Htaccess extends ConfigurationReader {
     authType = htAccessValues.get("AuthUserFile");
     authName = htAccessValues.get("AuthName");
     require = htAccessValues.get("Require");
-    try {
-      userFile = new Htpassword( htAccessValues.get("AuthUserFile"));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+
   }
 
   public void parseLine(String line) {
@@ -51,12 +47,13 @@ public class Htaccess extends ConfigurationReader {
     return authType;
   }
 
-
-
-
-
-
-
+  public void createPasswordFile(String directory){
+    try {
+      userFile = new Htpassword( directory + htAccessValues.get("AuthUserFile"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
 
 }

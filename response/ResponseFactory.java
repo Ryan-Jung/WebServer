@@ -99,8 +99,12 @@ public class ResponseFactory{
     }
 
     private boolean checkAuthorization(Request request){
-
-      Htaccess htaccess = new Htaccess(config.getConfigValue("AccessFileName"));
+      String accessFileName = ".htaccess";
+      if(config.getConfigValue("AccessFileName") != null){
+        accessFileName = config.getConfigValue("AccessFileName");
+      }
+      System.out.println("Checking" + requestResource.getDirectory() + accessFileName);
+      Htaccess htaccess = new Htaccess("/home/bob/Desktop/WebServer/web-server-team404/public_html/.htaccess");
       String authInfo = request.getHeaderValue("Authorization");
       String username = authInfo.substring( 0, authInfo.indexOf(":"));
       String password = authInfo.substring( authInfo.indexOf("}") + 2 );
