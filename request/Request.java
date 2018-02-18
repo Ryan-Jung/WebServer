@@ -124,9 +124,12 @@ public class Request {
   }
 
 
-  public HashMap<String, String> getHeaders() {
+  public String getHeaderValue(String key) {
+    return headers.get(key);
+  }
 
-    return headers;
+  public boolean containsHeader(String key) {
+    return headers.containsKey(key);
   }
 
 
