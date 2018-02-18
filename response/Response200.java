@@ -32,10 +32,10 @@ public class Response200 extends Response{
     public void addFile() throws IOException{
       Path filePath = Paths.get(resource.getAbsolutePath());
       byte[] file = Files.readAllBytes(filePath);
-      //String contentLength = "Content-Length: " + file.length + "\r\n";
-      //String contentType = "Content-Type: text/html\r\n";
-      //additionalHeaders = (contentLength + contentType).getBytes();
-      //body = file;
+      String contentLength = "Content-Length: " + file.length + "\r\n";
+      String contentType = "Content-Type: text/html\r\n";
+      additionalHeaders = (contentLength + contentType).getBytes();
+      body = file;
     }
 
 

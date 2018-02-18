@@ -92,8 +92,7 @@ public class ResponseFactory{
 
 
     private boolean hasAuthHeaders(Request request) {
-      if( request.containsHeader("WWW-Authenticate")
-      &&  request.containsHeader("Authorization")  ) {
+      if( request.containsHeader("Authorization")  ) {
         return true;
       }
       return false;
@@ -107,8 +106,8 @@ public class ResponseFactory{
       Htaccess htaccess = new Htaccess(requestResource.getDirectory() + accessFileName);
       Htpassword htpass =  htaccess.createPasswordFile();
       String authInfo = request.getHeaderValue("Authorization");
-
-      return htpass.isAuthorized(authInfo);
+      String [] authStrings = authInfo.split("\\s+");
+      return htpass.isAuthorized(authStrings[1]);
     }
 
 }

@@ -3,9 +3,10 @@ import java.io.IOException;
 import java.util.HashMap;
 public class Htaccess extends ConfigurationReader {
 
-  String authType;
+  String authFile;
   String authName;
   String require;
+  String authType;
   HashMap<String,String> htAccessValues;
 
   public Htaccess(String file) {
@@ -18,28 +19,30 @@ public class Htaccess extends ConfigurationReader {
     while( hasMoreLines() ) {
       parseLine( nextLine() );
     }
-    authType = htAccessValues.get("AuthUserFile");
+    authFile = htAccessValues.get("AuthUserFile");
     authName = htAccessValues.get("AuthName");
+    authType = htAccessValues.get("AuthType");
     require = htAccessValues.get("Require");
 
   }
 
   public void parseLine(String line) {
-    String currentLine = nextLine();
-    currentLine.replace("\"","");
+    String currentLine = line;
     String[] tokens = currentLine.split("\\s+");
     int numberOfTokens = tokens.length;
     if(numberOfTokens == 2 )  {
-      htAccessValues.put( tokens[0], tokens[1]);
+      htAccessValues.put( tokens[0], tokens[1].replaceAll("\"",""));
     }
   }
 
-  public String getAuthType(){
-    return authType;
-  }
 
   public Htpassword createPasswordFile() throws IOException{
-    return new Htpassword(htAccessValues.get("AuthUserFile"));
+    // for(String k : htAccessValues.keySet()){
+    //   System.out.println("acces value " + k );
+    // }
+
+    //System.out.println("authfile" + authFile);
+    return new Htpassword(authFile);
   }
 
 

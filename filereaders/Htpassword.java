@@ -11,7 +11,6 @@ public class Htpassword extends ConfigurationReader {
 
   public Htpassword( String filename ) throws IOException {
     super( filename );
-    System.out.println( "Password file: " + filename );
 
     this.passwords = new HashMap<String, String>();
     load();
@@ -51,7 +50,7 @@ public class Htpassword extends ConfigurationReader {
     // TODO: implement this - note that the encryption step is provided as a
     // method, below
     String encryptedPw = encryptClearPassword(password);
-    if( passwords.get(username) == encryptedPw ) {
+    if( passwords.get(username).equals(encryptedPw)) {
       return true;
     }
     return false;
