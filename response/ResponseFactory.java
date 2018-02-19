@@ -83,6 +83,7 @@ public class ResponseFactory {
 
 
   private Response completePutRequest(Request request, Resource requestResource) throws IOException {
+
     File fileToCreate = new File(requestResource.getAbsolutePath());
     if(fileToCreate.createNewFile()){
       FileOutputStream fileWriter = new FileOutputStream(fileToCreate);
@@ -90,9 +91,13 @@ public class ResponseFactory {
       fileWriter.flush();
       fileWriter.close();
       return new Response201(requestResource);
+    }else{
+      FileOutputStream fileWriter = new FileOutputStream(fileToCreate, false);
+      fileWriter.write(request.getBody());
+      fileWriter.flush();
+      fileWriter.close();
+      return new Response204(requestResource);
     }
-
-    return new Response200(requestResource);
   }
 
 
@@ -119,8 +124,9 @@ public class ResponseFactory {
 
 
   private Response completeDeleteRequest(Request request, Resource requestResource) throws IOException {
-
-    return null;
+    File file = new File(requestResource.getAbsolutePath());
+    file.delete();
+    return new Response204(requestResource);
   }
 
 
