@@ -118,8 +118,15 @@ public class ResponseFactory {
 
 
   private Response completePostRequest(Request request, Resource requestResource) throws IOException {
-
-    return null;
+    if(fileExists(requestResource)){
+      File fileToModify = new File(requestResource.getAbsolutePath());
+      FileOutputStream fileWriter = new FileOutputStream(fileToModify,true);
+      fileWriter.write(request.getBody());
+      fileWriter.flush();
+      fileWriter.close();
+      return new Response200(requestResource);
+    }
+    return new Response404(requestResource);
   }
 
 
