@@ -13,15 +13,12 @@ import filereaders.MimeTypes;
 
 public class Response200 extends Response{
 
-    private byte[] additionalHeaders = {};
-    private byte[] body = {};
-
-
     Response200(Resource resource){
         super(resource);
         this.code = 200;
         this.reasonPhrase = "OK";
     }
+
 
     @Override
     public void send(OutputStream outputStream) throws IOException{
@@ -37,6 +34,7 @@ public class Response200 extends Response{
       this.body = fileResourceToBytes();
     }
 
+
     public void addContentHeaders(MimeTypes mimes) throws IOException{
       byte[] file = fileResourceToBytes();
 
@@ -51,21 +49,22 @@ public class Response200 extends Response{
       String contentLengthHeader = "Content-Length: " + file.length + "\r\n";
       String contentTypeHeader = "Content-Type: " + contentType + "\r\n";
       byte[] contentHeaders = (contentLengthHeader + contentTypeHeader).getBytes();
-      
+
       addToHeaders(contentHeaders);
     }
 
 
-    public void addLastModifiedHeader() throws IOException{
+    public Date addLastModifiedHeader() throws IOException{
       File resourceFile = new File(resource.getAbsolutePath());
 
-      SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMMM YYYY HH:mm:ss");
+      SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMMM yyyy HH:mm:ss");
       dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-      Date date = new Date(resourceFile.lastModified());
-      byte[] lastModifiedHeader = ("Last-Modifed: " + dateFormatter.format(date) + " GMT\r\n").getBytes();
+      Date lastModifiedDate = new Date(resourceFile.lastModified());
+      byte[] lastModifiedHeader = ("Last-Modifed: " + dateFormatter.format(lastModifiedDate) + " GMT\r\n").getBytes();
 
       addToHeaders(lastModifiedHeader);
+      return lastModifiedDate;
     }
 
 
