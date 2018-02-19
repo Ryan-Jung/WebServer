@@ -49,6 +49,12 @@ public class Request {
       while ((line = bufferedReader.readLine()) != null && !line.equals("")) {
         builder.append(line + "\r\n");
       }
+      if(bufferedReader.ready()){
+        builder.append("\r\n");
+        while(bufferedReader.ready()){
+          builder.append((char) bufferedReader.read());
+        }
+      }
       request = builder.toString();
     } catch (IOException e) {
       e.printStackTrace();
@@ -73,7 +79,7 @@ public class Request {
 
 
   private void readBody(String bodyLine) {
-    byte[] temp = (bodyLine + "\r\n").getBytes();
+    byte[] temp = (bodyLine).getBytes();
     byte[] newBody = new byte[temp.length + body.length];
 
     System.arraycopy(body, 0, newBody, 0, body.length);
@@ -148,6 +154,13 @@ public class Request {
         validBody = false;
       }
     return validRequestLine && isValidVerb(verb) && validBody;
+  }
+
+  private int getBodyLength(){
+    if(headers.containsKey("Content-Length")){
+      return Integer.parseInt(headers.get("Content-Length"));
+    }
+    return 0;
   }
 
 
