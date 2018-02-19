@@ -4,12 +4,18 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.DataOutputStream;
+import java.util.TimeZone;
+import java.util.Calendar;
+import java.util.Date;
 import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
 
 public abstract class Response{
   public int code;
   public String reasonPhrase;
   Resource resource;
+  byte[] additionalHeaders = {};
+  byte[] body = {};
 
   public Response(Resource resource){
     this.resource = resource;
@@ -29,7 +35,9 @@ public abstract class Response{
   }
 
   private byte[] getDateAndServer(){
-    String date = "Date: " +LocalDateTime.now().toString() + "\r\n";
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMMM YYYY HH:mm:ss");
+    dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+    String date = "Date: " + dateFormatter.format(Calendar.getInstance().getTime()) + " GMT\r\n";
     String server = "Server: ryan-alvin-web-server\r\n";
     return (date + server).getBytes();
   }

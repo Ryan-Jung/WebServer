@@ -21,7 +21,7 @@ public class Worker{
     }
 
     public void run() throws IOException{
-      ResponseFactory responseFactory = new ResponseFactory(config);
+      ResponseFactory responseFactory = new ResponseFactory(config,mimes);
       Request request = new Request(client.getInputStream());
       //request.test();
       Resource requestResource = new Resource(config, request.getUri());

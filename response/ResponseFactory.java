@@ -7,10 +7,12 @@ import java.io.IOException;
 
 public class ResponseFactory{
     private Resource requestResource;
-    private HttpdConfig config;
+    private HttpdConfig configFile;
+    private MimeTypes mimeTypes;
 
-    public ResponseFactory(HttpdConfig configFile) {
-      config = configFile;
+    public ResponseFactory(HttpdConfig configFile,MimeTypes mimeTypes) {
+      this.configFile = configFile;
+      this.mimeTypes = mimeTypes;
     }
 
     public Response getResponse(Request request, Resource requestResource) throws IOException{
@@ -56,42 +58,50 @@ public class ResponseFactory{
 
 
 
-    private Response completeGetRequest(){
+    private Response completeGetRequest() throws IOException{
       if(fileExists()){
         Response200 response200 = new Response200(requestResource);
+        response200.addResource();
+        response200.addContentHeaders(mimeTypes);
         return response200;
       }else{
-        return new Response400(requestResource);
+        return new Response404(requestResource);
       }
     }
 
 
-    private Response completePutRequest(){
+    private Response completePutRequest() throws IOException{
 
       return null;
     }
 
 
-    private Response completeHeadRequest(){
+    private Response completeHeadRequest() throws IOException{
+
+      if(fileExists()){
+        Response200 response200 = new Response200(requestResource);
+        response200.addContentHeaders(mimeTypes);
+        response200.addLastModifiedHeader();
+        return response200;
+      }
+      return null;
+    }
+
+
+    private Response completePostRequest() throws IOException{
 
       return null;
     }
 
 
-    private Response completePostRequest(){
-
-      return null;
-    }
-
-
-    private Response completeDeleteRequest(){
+    private Response completeDeleteRequest() throws IOException{
 
       return null;
     }
 
 
 
-    private boolean hasAuthHeaders(Request request) {
+    private boolean hasAuthHeaders(Request request) throws IOException{
       if( request.containsHeader("Authorization")  ) {
         return true;
       }
@@ -100,8 +110,8 @@ public class ResponseFactory{
 
     private boolean checkAuthorization(Request request) throws IOException{
       String accessFileName = ".htaccess";
-      if(config.getConfigValue("AccessFileName") != null){
-        accessFileName = config.getConfigValue("AccessFileName");
+      if(configFile.getConfigValue("AccessFileName") != null){
+        accessFileName = configFile.getConfigValue("AccessFileName");
       }
       Htaccess htaccess = new Htaccess(requestResource.getDirectory() + accessFileName);
       Htpassword htpass =  htaccess.createPasswordFile();

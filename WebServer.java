@@ -1,7 +1,7 @@
 import filereaders.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.IOException;
+
 
 public class WebServer{
 
@@ -22,7 +22,7 @@ public class WebServer{
               Worker worker = new Worker(client, mimes, configFile);
               worker.run();
           }
-       }catch(IOException e){
+       }catch(Exception e){
          e.printStackTrace();
          System.out.println("Closing Server");
        }
