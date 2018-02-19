@@ -21,7 +21,9 @@ public class ResponseFactory {
 
 
   public Response getResponse(Request request, Resource requestResource) throws IOException {
-
+    if(request == null || requestResource == null){
+      return new Response500(requestResource);
+    }
     if (request.isValidRequest()) {
       return completeRequest(request, requestResource);
     } else {
@@ -66,7 +68,7 @@ public class ResponseFactory {
 
   private Response completeGetRequest(Request request, Resource requestResource) throws IOException {
 
-    if (modifiedSinceBeforeLastModified(request, requestResource)) {
+    if (ifModifiedSinceBeforeLastModified(request, requestResource)) {
       return build304Response(requestResource);
     }
     if (fileExists(requestResource)) {
@@ -90,7 +92,7 @@ public class ResponseFactory {
 
   private Response completeHeadRequest(Request request, Resource requestResource) throws IOException {
 
-    if (modifiedSinceBeforeLastModified(request, requestResource)) {
+    if (ifModifiedSinceBeforeLastModified(request, requestResource)) {
       return build304Response(requestResource);
     }
 
@@ -141,7 +143,7 @@ public class ResponseFactory {
   }
 
 
-  private Response304 build304Response(Resource requestResource){
+  private Response304 build304Response(Resource requestResource) throws IOException{
 
     Response304 response304 = new Response304(requestResource);
     response304.addLastModifiedHeader();
@@ -157,7 +159,10 @@ public class ResponseFactory {
   }
 
 
-  private boolean modifiedSinceBeforeLastModified(Request request, Resource requestResource) {
+  private boolean ifModifiedSinceBeforeLastModified(Request request, Resource requestResource) {
+    if(!request.containsHeader("If-Modified-Since")){
+      return false;
+    }
     SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMMM yyyy HH:mm:ss");
     dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 
