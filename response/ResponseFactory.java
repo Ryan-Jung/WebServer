@@ -5,6 +5,7 @@ import resource.*;
 import filereaders.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
@@ -21,9 +22,6 @@ public class ResponseFactory {
 
 
   public Response getResponse(Request request, Resource requestResource) throws IOException {
-    if(request == null || requestResource == null){
-      return new Response500(requestResource);
-    }
     if (request.isValidRequest()) {
       return completeRequest(request, requestResource);
     } else {
@@ -85,8 +83,16 @@ public class ResponseFactory {
 
 
   private Response completePutRequest(Request request, Resource requestResource) throws IOException {
+    File fileToCreate = new File(requestResource.getAbsolutePath());
+    if(fileToCreate.createNewFile()){
+      FileOutputStream fileWriter = new FileOutputStream(fileToCreate);
+      fileWriter.write(request.getBody());
+      fileWriter.flush();
+      fileWriter.close();
+      return new Response201(requestResource);
+    }
 
-    return null;
+    return new Response200(requestResource);
   }
 
 
@@ -137,9 +143,9 @@ public class ResponseFactory {
     Htaccess htaccess = new Htaccess(requestResource.getDirectory() + accessFileName);
     Htpassword htpass = htaccess.createPasswordFile();
     String authInfo = request.getHeaderValue("Authorization");
-    String[] authStrings = authInfo.split("\\s+");
+    String credentials = authInfo.split("\\s+")[1];
 
-    return htpass.isAuthorized(authStrings[1]);
+    return htpass.isAuthorized(credentials);
   }
 
 

@@ -68,17 +68,6 @@ public class Response200 extends Response{
     }
 
 
-    private void addToHeaders(byte[] headerToAdd){
-      int newLength = additionalHeaders.length + headerToAdd.length;
-      byte [] newHeaderArray = new byte[newLength];
-
-      System.arraycopy(additionalHeaders, 0, newHeaderArray, 0, additionalHeaders.length);
-      System.arraycopy(headerToAdd, 0, newHeaderArray, additionalHeaders.length, headerToAdd.length);
-
-      this.additionalHeaders = newHeaderArray;
-    }
-
-
     private byte[] fileResourceToBytes() throws IOException {
       Path filePath = Paths.get(resource.getAbsolutePath());
       return Files.readAllBytes(filePath);
