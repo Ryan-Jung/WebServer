@@ -15,9 +15,8 @@ import java.lang.Process;
 import java.util.Map;
 
 import java.io.InputStream;
-import java.io.BufferedReader;
 import java.io.OutputStream;
-import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class ResponseFactory {
   private HttpdConfig configFile;
@@ -52,30 +51,31 @@ public class ResponseFactory {
       }
     }
     if( resource.isScript() ) {
-      executeScript(request,resource);
-    }
-    switch (request.getVerb()) {
-    case "GET":
-      response = completeGetRequest(request, resource);
-      break;
-    case "PUT":
-      response = completePutRequest(request, resource);
-      break;
-    case "HEAD":
-      response = completeHeadRequest(request, resource);
-      break;
-    case "POST":
-      response = completePostRequest(request, resource);
-      break;
-    case "DELETE":
-      response = completeDeleteRequest(request, resource);
-      break;
+      response = executeScript(request,resource);
+    } else {
+      switch (request.getVerb()) {
+      case "GET":
+        response = completeGetRequest(request, resource);
+        break;
+      case "PUT":
+        response = completePutRequest(request, resource);
+        break;
+      case "HEAD":
+        response = completeHeadRequest(request, resource);
+        break;
+      case "POST":
+        response = completePostRequest(request, resource);
+        break;
+      case "DELETE":
+        response = completeDeleteRequest(request, resource);
+        break;
+      }
     }
     return response;
   }
 
 
-  private void executeScript(Request request, Resource resource){
+  private Response executeScript(Request request, Resource resource){
     String uri = resource.getAbsolutePath();
     String scriptPath = uri;
     ProcessBuilder processBuilder = new ProcessBuilder(scriptPath);
@@ -99,8 +99,16 @@ public class ResponseFactory {
       }
       process.waitFor();
       
+      InputStream processInput = process.getInputStream();
+      byte[] bodyMessage = new byte[processInput.available()];
+      processInput.read(bodyMessage);
+      System.out.println(Arrays.toString(bodyMessage)); 
+      Response200 successResponse = new Response200(resource);
+      successResponse.setBody(bodyMessage);
+      return successResponse; 
     } catch(IOException | InterruptedException e) {
-  
+      Response500 failedResponse = new Response500(resource);
+      return failedResponse; 
     }
   }
 
