@@ -29,7 +29,8 @@ public class Worker implements Runnable{
         Request request = new Request(client.getInputStream());
         //request.test();
         Resource requestResource = new Resource(config, request.getUri());
-        Response response = responseFactory.getResponse(request,requestResource);
+        Response response;
+        response = responseFactory.getResponse(request,requestResource);
         response.send(client.getOutputStream());
         String log = createLogAndPrint(request,requestResource,response);
         writeToLogFile(log);

@@ -77,6 +77,7 @@ public class Htpassword extends ConfigurationReader {
      try{
 
      Htpassword test = new Htpassword("example.htpasswd");
+     System.out.println(test.encryptClearPassword("alvin"));
      System.out.println(test.passwords.get("jrob"));
 
 

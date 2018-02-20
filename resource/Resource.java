@@ -21,7 +21,7 @@ public class Resource {
 
   private boolean isFile(String uri) {
 
-    if( uri != null && uri.contains(".") ) {
+    if( uri != null && uri.contains(".") || isScript ) {
       return true;
     }
 
@@ -72,7 +72,7 @@ public class Resource {
   }
 
 
-  public boolean isScript(String script) {
+  public boolean isScript() {
 
     return isScript;
   }

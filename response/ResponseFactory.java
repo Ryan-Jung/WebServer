@@ -10,6 +10,14 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.lang.ProcessBuilder;
+import java.lang.Process;
+import java.util.Map;
+
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.OutputStream;
+import java.io.InputStreamReader;
 
 public class ResponseFactory {
   private HttpdConfig configFile;
@@ -43,6 +51,9 @@ public class ResponseFactory {
         }
       }
     }
+    if( resource.isScript() ) {
+      executeScript(request,resource);
+    }
     switch (request.getVerb()) {
     case "GET":
       response = completeGetRequest(request, resource);
@@ -63,6 +74,35 @@ public class ResponseFactory {
     return response;
   }
 
+
+  private void executeScript(Request request, Resource resource){
+    String uri = resource.getAbsolutePath();
+    String scriptPath = uri;
+    ProcessBuilder processBuilder = new ProcessBuilder(scriptPath);
+    Map<String,String> environment = processBuilder.environment();
+    environment.clear();
+    if( uri.contains("?") ) {
+      scriptPath = uri.substring(0,uri.indexOf("?"));
+      String queryString = uri.substring( uri.indexOf("?") + 1 );
+      environment.put("QUERY_STRING", queryString);
+    }
+    environment.put("SERVER_PROTOCOL", request.getHTTPVersion());
+    for(String key: request.getHeaders().keySet() ) {
+      environment.put("HTTP_" + key, request.getHeaders().get(key));
+    }
+    try {
+  
+      Process process = processBuilder.start();
+      if( request.getBody() != null) {
+        OutputStream processOutput = process.getOutputStream();
+        processOutput.write(request.getBody());
+      }
+      process.waitFor();
+      
+    } catch(IOException | InterruptedException e) {
+  
+    }
+  }
 
   private Response completeGetRequest(Request request, Resource requestResource) throws IOException {
 

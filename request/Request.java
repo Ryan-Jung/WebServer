@@ -119,13 +119,11 @@ public class Request {
 
 
   public String getHTTPVersion() {
-
     return httpVersion;
   }
 
 
   public byte[] getBody() {
-
     return body;
   }
 
@@ -144,6 +142,9 @@ public class Request {
     return validVerbs.contains(verb);
   }
 
+  public HashMap<String,String> getHeaders() {
+    return headers; 
+  }
 
   public boolean isValidRequest() {
 
