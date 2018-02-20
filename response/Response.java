@@ -25,6 +25,9 @@ public abstract class Response{
   public void send(OutputStream outputStream) throws IOException{
       write(getStatusLine(),outputStream);
       write(getDateAndServer(),outputStream);
+      if( resource.isScript() ) {
+        write( body, outputStream);
+      }
   }
 
 

@@ -102,7 +102,6 @@ public class ResponseFactory {
       InputStream processInput = process.getInputStream();
       byte[] bodyMessage = new byte[processInput.available()];
       processInput.read(bodyMessage);
-      System.out.println(Arrays.toString(bodyMessage)); 
       Response200 successResponse = new Response200(resource);
       successResponse.setBody(bodyMessage);
       return successResponse; 
