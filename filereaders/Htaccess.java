@@ -37,11 +37,6 @@ public class Htaccess extends ConfigurationReader {
 
 
   public Htpassword createPasswordFile() throws IOException{
-    // for(String k : htAccessValues.keySet()){
-    //   System.out.println("acces value " + k );
-    // }
-
-    //System.out.println("authfile" + authFile);
     return new Htpassword(authFile);
   }
 
