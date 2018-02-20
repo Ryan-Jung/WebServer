@@ -7,6 +7,7 @@ public class Resource {
   private static String DIRINDEX = "index.html";
   private String absolutePath;
   private boolean isScript = false;
+  private String queryString = ""; 
   private HttpdConfig configFile;
 
 
@@ -58,6 +59,11 @@ public class Resource {
       String scriptValue = configFile.getScriptValue(scriptAlias);
       modifiedUri = uri.replace(scriptAlias,scriptValue);
       isScript = true;
+      if( modifiedUri.contains("?") ) {
+        queryString = modifiedUri.substring( modifiedUri.indexOf("?") + 1);
+        modifiedUri = modifiedUri.substring(0, modifiedUri.indexOf("?"));
+      }
+
 
     } else {
         modifiedUri = docRoot + uri;
@@ -77,6 +83,9 @@ public class Resource {
     return isScript;
   }
 
+  public String getQuery() {
+    return queryString;
+  }
 
   public boolean isProtected() {
 
