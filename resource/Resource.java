@@ -37,7 +37,6 @@ public class Resource {
     if( isFile(uri) == false ) {
       absPath = absPath + DIRINDEX;
     }
-    System.out.println(absPath);
     return absPath;
   }
 
@@ -88,7 +87,6 @@ public class Resource {
     }
 
     String directoryToCheck = absolutePath.substring(0,absolutePath.lastIndexOf('/') + 1);
-    System.out.println("Diretory:" + directoryToCheck);
     File accessFile = new File(directoryToCheck + accesFileName);
 
     return accessFile.exists();

@@ -47,7 +47,7 @@ public abstract class Response{
 
 
   private byte[] getDateAndServer(){
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMMM YYYY HH:mm:ss");
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMMM yyyy HH:mm:ss");
     dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
     String date = "Date: " + dateFormatter.format(Calendar.getInstance().getTime()) + " GMT\r\n";
     String server = "Server: ryan-alvin-web-server\r\n";
