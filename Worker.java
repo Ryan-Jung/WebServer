@@ -29,17 +29,22 @@ public class Worker implements Runnable{
     public void run(){
       try{
         Request request = new Request(client.getInputStream());
-        //request.test();
+
         Resource requestResource = new Resource(config, request.getUri());
+
         Response response = responseFactory.getResponse(request,requestResource);
         response.send(client.getOutputStream());
+
         String log = createLogAndPrint(request,requestResource,response);
+
         writeToLogFile(log);
+
         client.close();
       }catch(IOException e){
         try{
           Response500 internalError  = new Response500(null);
           internalError.send(client.getOutputStream());
+
           client.close();
         }catch(IOException ioe){}
       }
@@ -47,6 +52,7 @@ public class Worker implements Runnable{
 
 
     private synchronized void writeToLogFile(String log) throws IOException{
+
       String logFile = config.getConfigValue("LogFile");
       File file = new File (logFile);
       file.createNewFile();
@@ -58,6 +64,7 @@ public class Worker implements Runnable{
 
 
     private String createLogAndPrint(Request request, Resource resource, Response response){
+
         String ipAddress = client.getRemoteSocketAddress().toString();
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat("[dd/MMM/yyyy:HH:mm:ssZ]");
@@ -76,15 +83,16 @@ public class Worker implements Runnable{
     }
 
     private String getUserName(Request request){
-      String authInfo = request.getHeaderValue("Authorization");
-      if(authInfo == null){
+
+      String user = request.getHeaderValue("Authorization");
+      if(user == null){
         return "";
       }else{
-        authInfo = authInfo.split("\\s+")[1];
+        user = authInfo.split("\\s+")[1];
       }
 
       String credentials = new String(
-        Base64.getDecoder().decode( authInfo ),
+        Base64.getDecoder().decode( user ),
         Charset.forName( "UTF-8" )
       );
 
