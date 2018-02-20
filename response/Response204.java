@@ -18,5 +18,4 @@ public class Response204 extends Response{
     addToHeaders(contentLocation.getBytes());
     write(additionalHeaders, outputStream);
   }
-
 }

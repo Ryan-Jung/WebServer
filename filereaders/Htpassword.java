@@ -72,19 +72,4 @@ public class Htpassword extends ConfigurationReader {
       return "";
     }
   }
-
-  public static void main(String[] args) {
-     try{
-
-     Htpassword test = new Htpassword("example.htpasswd");
-     System.out.println(test.encryptClearPassword("alvin"));
-     System.out.println(test.passwords.get("jrob"));
-
-
-     }catch(IOException e){
-
-     }
-
-  }
-
 }

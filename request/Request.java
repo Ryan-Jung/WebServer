@@ -1,3 +1,4 @@
+
 package request;
 
 import java.util.HashMap;
@@ -163,23 +164,4 @@ public class Request {
     }
     return 0;
   }
-
-
-  public void test() {
-
-    System.out.println(verb + "\n" + uri + "\n" + httpVersion);
-
-    for (Map.Entry<String, String> entry : headers.entrySet()) {
-      String key = entry.getKey();
-      String value = entry.getValue();
-      System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
-    }
-
-    if (body.length > 0) {
-      System.out.println(new String(body));
-    }
-    System.out.println("Valid Request " + isValidRequest());
-    System.out.println("-----------------------------------------------");
-  }
-
 }

@@ -28,8 +28,6 @@ public class Response200 extends Response{
       write(body,outputStream);
     }
 
-
-
     public void addResource() throws IOException{
       this.body = fileResourceToBytes();
     }
@@ -73,7 +71,6 @@ public class Response200 extends Response{
       addToHeaders(lastModifiedHeader);
       return lastModifiedDate;
     }
-
 
     private byte[] fileResourceToBytes() throws IOException {
       Path filePath = Paths.get(resource.getAbsolutePath());

@@ -7,5 +7,4 @@ public class Response403 extends Response{
     this.code = 403;
     this.reasonPhrase = "Forbidden";
   }
-
 }

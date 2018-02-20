@@ -14,5 +14,4 @@ public class Response401 extends Response {
     super.send(outputStream);
     write("WWW-Authenticate: Basic realm=\"stuff\",charest=\"UTF-8\"".getBytes(),outputStream);
   }
-
 }

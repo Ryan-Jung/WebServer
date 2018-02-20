@@ -7,5 +7,4 @@ public class Response404 extends Response{
     this.code = 404;
     this.reasonPhrase = "Not Found";
   }
-
 }

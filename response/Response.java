@@ -21,33 +21,27 @@ public abstract class Response{
     this.resource = resource;
   }
 
-
   public void send(OutputStream outputStream) throws IOException{
-      write(getStatusLine(),outputStream);
-      write(getDateAndServer(),outputStream);
-      if( resource.isScript() ) {
-        write( body, outputStream);
-      }
+    write(getStatusLine(),outputStream);
+    write(getDateAndServer(),outputStream);
+    if( resource.isScript() ) {
+      write( body, outputStream);
+    }
   }
-
 
   void write(byte[] bytesToWrite,OutputStream outputStream) throws IOException{
-        for(int i = 0; i < bytesToWrite.length; i++){
-          outputStream.write(bytesToWrite[i]);
-        }
+    for(int i = 0; i < bytesToWrite.length; i++){
+      outputStream.write(bytesToWrite[i]);
+    }
   }
-
 
   void addToHeaders(byte[] headerToAdd){
     int newLength = additionalHeaders.length + headerToAdd.length;
     byte [] newHeaderArray = new byte[newLength];
-
     System.arraycopy(additionalHeaders, 0, newHeaderArray, 0, additionalHeaders.length);
     System.arraycopy(headerToAdd, 0, newHeaderArray, additionalHeaders.length, headerToAdd.length);
-
     this.additionalHeaders = newHeaderArray;
   }
-
 
   private byte[] getDateAndServer(){
     SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMMM yyyy HH:mm:ss");
@@ -58,7 +52,6 @@ public abstract class Response{
   }
 
   private byte[] getStatusLine(){
-
      String statusLine = "HTTP/1.1 " + code + " " + reasonPhrase +"\r\n";
      return statusLine.getBytes();
   }

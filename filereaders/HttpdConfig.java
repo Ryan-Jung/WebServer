@@ -104,35 +104,4 @@ public class HttpdConfig extends ConfigurationReader {
         }
       }
     }
-
-
-    public void test() {
-
-      System.out.println("Printing Config shit: \n");
-      for (Map.Entry<String,String> entry : configInfo.entrySet()) {
-        String key = entry.getKey();
-        String value = entry.getValue();
-        System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
-      }
-      System.out.println("Printing Aliases: \n");
-      for (Map.Entry<String,String> entry : aliases.entrySet()) {
-        String key = entry.getKey();
-        String value = entry.getValue();
-        System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
-      }
-      System.out.println("Printing Script Aliases: \n");
-      for (Map.Entry<String,String> entry : scriptAliases.entrySet()) {
-        String key = entry.getKey();
-        String value = entry.getValue();
-        System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
-      }
-    }
-
-
-    public static void main(String[] args) {
-      HttpdConfig test = new HttpdConfig("conf/httpd.conf");
-      test.load();
-      test.test();
-    }
-
 }

@@ -7,5 +7,4 @@ public class Response400 extends Response{
       this.code = 400;
       this.reasonPhrase = "Bad Request";
     }
-
 }

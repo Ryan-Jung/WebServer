@@ -27,7 +27,6 @@ public class ResponseFactory {
     this.mimeTypes = mimeTypes;
   }
 
-
   public Response getResponse(Request request, Resource requestResource) throws IOException {
     if (request.isValidRequest()) {
       return completeRequest(request, requestResource);
@@ -35,7 +34,6 @@ public class ResponseFactory {
       return new Response400(requestResource);
     }
   }
-
 
   private Response completeRequest(Request request, Resource resource) throws IOException {
 
@@ -74,7 +72,6 @@ public class ResponseFactory {
     return response;
   }
 
-
   private Response executeScript(Request request, Resource resource){
     String uri = resource.getAbsolutePath();
     String scriptPath = uri;
@@ -88,7 +85,6 @@ public class ResponseFactory {
       environment.put("HTTP_" + key, request.getHeaders().get(key));
     }
     try {
-  
       Process process = processBuilder.start();
       if( request.getBody() != null) {
         OutputStream processOutput = process.getOutputStream();
@@ -108,6 +104,7 @@ public class ResponseFactory {
     }
   }
 
+
   private Response completeGetRequest(Request request, Resource requestResource) throws IOException {
 
     if (ifModifiedSinceBeforeLastModified(request, requestResource)) {
@@ -123,8 +120,6 @@ public class ResponseFactory {
         return new Response404(requestResource);
       }
   }
-
-
 
   private Response completePutRequest(Request request, Resource requestResource) throws IOException {
 
@@ -144,7 +139,6 @@ public class ResponseFactory {
     }
   }
 
-
   private Response completeHeadRequest(Request request, Resource requestResource) throws IOException {
 
     if (ifModifiedSinceBeforeLastModified(request, requestResource)) {
@@ -160,7 +154,6 @@ public class ResponseFactory {
     return null;
   }
 
-
   private Response completePostRequest(Request request, Resource requestResource) throws IOException {
     if(fileExists(requestResource)){
       File fileToModify = new File(requestResource.getAbsolutePath());
@@ -173,13 +166,11 @@ public class ResponseFactory {
     return new Response404(requestResource);
   }
 
-
   private Response completeDeleteRequest(Request request, Resource requestResource) throws IOException {
     File file = new File(requestResource.getAbsolutePath());
     file.delete();
     return new Response204(requestResource);
   }
-
 
   private boolean hasAuthHeaders(Request request) throws IOException {
 
@@ -188,7 +179,6 @@ public class ResponseFactory {
     }
     return false;
   }
-
 
   private boolean checkAuthorization(Request request, Resource requestResource) throws IOException {
 
@@ -205,7 +195,6 @@ public class ResponseFactory {
     return htpass.isAuthorized(credentials);
   }
 
-
   private Response304 build304Response(Resource requestResource) throws IOException{
 
     Response304 response304 = new Response304(requestResource);
@@ -215,12 +204,10 @@ public class ResponseFactory {
     return response304;
   }
 
-
   private boolean fileExists(Resource requestResource) {
     File fileRequested = new File(requestResource.getAbsolutePath());
     return fileRequested.exists();
   }
-
 
   private boolean ifModifiedSinceBeforeLastModified(Request request, Resource requestResource) {
     if(!request.containsHeader("If-Modified-Since")){
@@ -241,6 +228,5 @@ public class ResponseFactory {
     }
     return lastModified.after(ifModifiedSince);
   }
-
 
 }

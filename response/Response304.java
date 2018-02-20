@@ -7,6 +7,4 @@ public class Response304 extends Response200{
       this.code = 304;
       this.reasonPhrase = "Not Modified";
     }
-
-
 }

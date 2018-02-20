@@ -38,22 +38,4 @@ public class MimeTypes extends ConfigurationReader {
     return mimeTypes.get(key);
   }
 
-  public void test() {
-    for(Map.Entry<String,String> entry: mimeTypes.entrySet()){
-      String key = entry.getKey();
-      String value = entry.getValue();
-      System.out.println("Key: " + key + "\n" + "Value: " + value + "\n");
-    }
-  }
-
-  public static void main(String[] args) {
-    MimeTypes test = new MimeTypes("conf/mime.types");
-    test.load();
-    while(true){
-      Scanner scan = new Scanner(System.in);
-      System.out.println(test.lookUp(scan.nextLine()));
-    }
-  }
-
-
 }
