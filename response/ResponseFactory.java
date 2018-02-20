@@ -80,11 +80,8 @@ public class ResponseFactory {
     String scriptPath = uri;
     ProcessBuilder processBuilder = new ProcessBuilder(scriptPath);
     Map<String,String> environment = processBuilder.environment();
-    environment.clear();
-    if( uri.contains("?") ) {
-      scriptPath = uri.substring(0,uri.indexOf("?"));
-      String queryString = uri.substring( uri.indexOf("?") + 1 );
-      environment.put("QUERY_STRING", queryString);
+    if( !resource.getQuery().equals("") ) {
+      environment.put("QUERY_STRING", resource.getQuery() );
     }
     environment.put("SERVER_PROTOCOL", request.getHTTPVersion());
     for(String key: request.getHeaders().keySet() ) {
