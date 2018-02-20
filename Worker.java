@@ -6,22 +6,34 @@ import java.net.Socket;
 import java.io.IOException;
 import java.io.File;
 
-public class Worker{
+public class Worker implements Runnable{
     private Socket client;
     private MimeTypes mimes;
     private HttpdConfig config;
+    ResponseFactory responseFactory;
 
     Worker(Socket client, MimeTypes mimes, HttpdConfig config){
       this.client = client;
       this.mimes = mimes;
       this.config = config;
-    }
-    private void printLineBreak() {
-      System.out.println("----------------------------------------");
+      this.responseFactory = new ResponseFactory(config,mimes);
     }
 
-    public void run() throws IOException{
-      ResponseFactory responseFactory = new ResponseFactory(config,mimes);
+    @Override
+    public void run(){
+      try{
+        createRequestAndSendResponse();
+      }catch(IOException e){
+        try{
+          Response500 internalError  = new Response500(null);
+          internalError.send(client.getOutputStream());
+          client.close();
+        }catch(IOException ioe){}
+      }
+    }
+
+
+    private void createRequestAndSendResponse() throws IOException{
       Request request = new Request(client.getInputStream());
       //request.test();
       Resource requestResource = new Resource(config, request.getUri());

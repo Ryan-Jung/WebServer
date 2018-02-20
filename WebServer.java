@@ -14,13 +14,15 @@ public class WebServer{
       mimes = new MimeTypes("conf/mime.types");
       int portNumber = getPortNumber();
       System.out.println("Starting server on port: " + portNumber);
+      int count = 0;
       try(
         ServerSocket  serverSocket = new ServerSocket(portNumber);
       ){
         while(true){
               client = serverSocket.accept();
               Worker worker = new Worker(client, mimes, configFile);
-              worker.run();
+              Thread thread = new Thread(worker);
+              thread.start();
           }
        }catch(Exception e){
          e.printStackTrace();
