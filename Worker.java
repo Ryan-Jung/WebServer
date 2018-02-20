@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 import java.util.Calendar;
+import java.util.Base64;
+import java.nio.charset.Charset;
 
 public class Worker implements Runnable{
     private Socket client;
@@ -49,8 +51,8 @@ public class Worker implements Runnable{
       File file = new File (logFile);
       file.createNewFile();
       FileWriter fileWriter = new FileWriter(file,true);
-      fileWriter.write(System.lineSeparator());
       fileWriter.write(log);
+      fileWriter.write(System.lineSeparator());
       fileWriter.close();
     }
 
@@ -67,9 +69,30 @@ public class Worker implements Runnable{
 
         String objectSize = request.getBody().length > 0 ? Integer.toString(request.getBody().length) : "-";
 
-        String log = ipAddress + " - " + timeOfRequest + " " + requestLine + " " + response.code +
+        String log = ipAddress + " - " + getUserName(request) + " " + timeOfRequest + " " + requestLine + " " + response.code +
                     " " + objectSize;
         System.out.println(log);
         return log;
+    }
+
+    private String getUserName(Request request){
+      String authInfo = request.getHeaderValue("Authorization");
+      if(authInfo == null){
+        return "";
+      }else{
+        authInfo = authInfo.split("\\s+")[1];
+      }
+
+      String credentials = new String(
+        Base64.getDecoder().decode( authInfo ),
+        Charset.forName( "UTF-8" )
+      );
+
+      String[] tokens = credentials.split( ":" );
+      if(tokens.length != 2){
+        return "";
+      }
+      String username = tokens[0];
+      return username;
     }
 }
