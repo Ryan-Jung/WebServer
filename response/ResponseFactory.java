@@ -73,19 +73,8 @@ public class ResponseFactory {
   }
 
   private Response executeScript(Request request, Resource resource){
-    String uri = resource.getAbsolutePath();
-    String scriptPath = uri;
-    ProcessBuilder processBuilder = new ProcessBuilder(scriptPath);
-    Map<String,String> environment = processBuilder.environment();
-    if( !resource.getQuery().equals("") ) {
-      environment.put("QUERY_STRING", resource.getQuery() );
-    }
-    environment.put("SERVER_PROTOCOL", request.getHTTPVersion());
-    for(String key: request.getHeaders().keySet() ) {
-      environment.put("HTTP_" + key, request.getHeaders().get(key));
-    }
     try {
-      Process process = processBuilder.start();
+      Process process = buildProcess(request,resource);
       if( request.getBody() != null) {
         OutputStream processOutput = process.getOutputStream();
         processOutput.write(request.getBody());
@@ -104,6 +93,20 @@ public class ResponseFactory {
     }
   }
 
+  private Process buildProcess(Request request, Resource resource) throws IOException{
+    String uri = resource.getAbsolutePath();
+    String scriptPath = uri;
+    ProcessBuilder processBuilder = new ProcessBuilder(scriptPath);
+    Map<String,String> environment = processBuilder.environment();
+    if( !resource.getQuery().equals("") ) {
+      environment.put("QUERY_STRING", resource.getQuery() );
+    }
+    environment.put("SERVER_PROTOCOL", request.getHTTPVersion());
+    for(String key: request.getHeaders().keySet() ) {
+      environment.put("HTTP_" + key, request.getHeaders().get(key));
+    }
+    return processBuilder.start();
+  }
 
   private Response completeGetRequest(Request request, Resource requestResource) throws IOException {
 
