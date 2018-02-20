@@ -98,12 +98,12 @@ public class ResponseFactory {
         processOutput.write(request.getBody());
       }
       process.waitFor();
-      
+
       InputStream processInput = process.getInputStream();
-      byte[] bodyMessage = new byte[processInput.available()];
-      processInput.read(bodyMessage);
+      byte[] scriptOutput = new byte[processInput.available()];
+      processInput.read(scriptOutput);
       Response200 successResponse = new Response200(resource);
-      successResponse.setBody(bodyMessage);
+      successResponse.setScriptResult(scriptOutput);
       return successResponse; 
     } catch(IOException | InterruptedException e) {
       Response500 failedResponse = new Response500(resource);

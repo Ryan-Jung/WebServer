@@ -57,6 +57,10 @@ public class Response200 extends Response{
       this.body = body; 
     }
 
+    public void setScriptResult( byte[] message) {
+      this.additionalHeaders = message;
+    }
+
     public Date addLastModifiedHeader() throws IOException{
       File resourceFile = new File(resource.getAbsolutePath());
 
