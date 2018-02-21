@@ -86,10 +86,10 @@ public class ResponseFactory {
       processInput.read(scriptOutput);
       Response200 successResponse = new Response200(resource);
       successResponse.setScriptResult(scriptOutput);
-      return successResponse; 
+      return successResponse;
     } catch(IOException | InterruptedException e) {
       Response500 failedResponse = new Response500(resource);
-      return failedResponse; 
+      return failedResponse;
     }
   }
 
@@ -110,7 +110,7 @@ public class ResponseFactory {
 
   private Response completeGetRequest(Request request, Resource requestResource) throws IOException {
 
-    if (ifModifiedSinceBeforeLastModified(request, requestResource)) {
+    if (ifModifiedSinceAfterLastModified(request, requestResource)) {
       return build304Response(requestResource);
     }
     if (fileExists(requestResource)) {
@@ -144,7 +144,7 @@ public class ResponseFactory {
 
   private Response completeHeadRequest(Request request, Resource requestResource) throws IOException {
 
-    if (ifModifiedSinceBeforeLastModified(request, requestResource)) {
+    if (ifModifiedSinceAfterLastModified(request, requestResource)) {
       return build304Response(requestResource);
     }
 
@@ -212,7 +212,7 @@ public class ResponseFactory {
     return fileRequested.exists();
   }
 
-  private boolean ifModifiedSinceBeforeLastModified(Request request, Resource requestResource) {
+  private boolean ifModifiedSinceAfterLastModified(Request request, Resource requestResource) {
     if(!request.containsHeader("If-Modified-Since")){
       return false;
     }
@@ -229,7 +229,7 @@ public class ResponseFactory {
     } catch (ParseException e) {
       return false;
     }
-    return lastModified.after(ifModifiedSince);
+    return ifModifiedSince.after(lastModified);
   }
 
 }
